@@ -9,7 +9,10 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $featuredMitras = MitraProfile::where('status', 'active')->take(3)->get();
+        $featuredMitras = MitraProfile::where('status', 'active')
+            ->orderByRaw("id = 'doni' DESC, updated_at DESC")
+            ->take(3)
+            ->get();
         return view('home', compact('featuredMitras'));
     }
 
