@@ -763,12 +763,53 @@
       border-color: var(--color-primary);
       box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);
     }
+
+    /* Custom image thumb delete button */
+    .custom-thumb-wrapper {
+      position: relative;
+      display: inline-flex;
+    }
+
+    .btn-delete-custom-img {
+      position: absolute;
+      top: -7px;
+      right: -7px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #EF4444;
+      color: #FFFFFF;
+      border: 2px solid #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      transition: all 0.15s ease;
+      z-index: 20;
+      padding: 0;
+    }
+
+    .btn-delete-custom-img:hover {
+      background: #DC2626;
+      transform: scale(1.18);
+    }
   </style>
 </head>
 <body class="dashboard-body">
   @include('partials.preloader')
 
   @php
+    $presetImages = [
+      'assets/images/partner_doni.jpg',
+      'assets/images/partner_budi.jpg',
+      'assets/images/partner_adam.jpg',
+      'assets/images/partner_haris.jpg',
+      'assets/images/about_organic.jpg',
+    ];
+    $rawImg = $profile->image ?? 'assets/images/partner_doni.jpg';
+    $isCustomImg = !empty($profile->image) && !in_array($profile->image, $presetImages);
+
     $pName = $profile->name ?? 'Peternakan Pak Doni';
     $pOwner = $profile->owner ?? 'Pak Doni Prasetyo';
     $pEmail = $user->email ?? 'doni@sisaberkah.id';
@@ -1083,29 +1124,47 @@
                       </div>
                     </div>
 
-                    <input type="file" id="deviceFileInput" accept="image/*" style="display:none;" onchange="handleDeviceImageUpload(event)">
-                    <button type="button" class="btn-partner-profile" onclick="document.getElementById('deviceFileInput').click()" style="width:auto;padding:0.55rem 1.15rem;background:#FFFFFF;border-color:var(--color-primary);color:var(--color-primary);font-size:0.85rem;display:inline-flex;align-items:center;gap:0.45rem;">
-                      <i data-lucide="upload" style="width:15px;height:15px;"></i>
-                      <span>Pilih Foto dari Perangkat</span>
-                    </button>
+                    <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+                      <input type="file" id="deviceFileInput" accept="image/*" style="display:none;" onchange="handleDeviceImageUpload(event)">
+                      <button type="button" class="btn-partner-profile" onclick="document.getElementById('deviceFileInput').click()" style="width:auto;padding:0.55rem 1.15rem;background:#FFFFFF;border-color:var(--color-primary);color:var(--color-primary);font-size:0.85rem;display:inline-flex;align-items:center;gap:0.45rem;">
+                        <i data-lucide="upload" style="width:15px;height:15px;"></i>
+                        <span>Pilih Foto dari Perangkat</span>
+                      </button>
+
+                      <button type="button" id="btnRemoveCustomPhoto" onclick="deleteCustomImage(event)" style="display:{{ $isCustomImg ? 'inline-flex' : 'none' }};width:auto;padding:0.55rem 0.95rem;background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;align-items:center;gap:0.4rem;transition:all 0.2s ease;" title="Hapus foto unggahan kustom">
+                        <i data-lucide="trash-2" style="width:15px;height:15px;"></i>
+                        <span>Hapus Foto</span>
+                      </button>
+                    </div>
                   </div>
 
                   <div style="font-size:0.8rem;font-weight:600;color:var(--color-muted);margin-bottom:0.45rem;">Atau pilih dari koleksi foto preset:</div>
                   <div class="image-selector-row" id="imagePresetContainer">
-                    <span id="customImageSlot" style="display:none;"></span>
-                    <button type="button" class="image-thumb-btn active" data-img="assets/images/partner_doni.jpg" onclick="selectPresetImage(this)" title="Peternakan Kambing / Domba">
+                    <span id="customImageSlot" style="display:{{ $isCustomImg ? 'inline-flex' : 'none' }};">
+                      @if($isCustomImg)
+                        <div class="custom-thumb-wrapper">
+                          <button type="button" class="image-thumb-btn active" data-img="{{ $rawImg }}" onclick="selectPresetImage(this)" title="Foto dari Perangkat Anda">
+                            <img src="{{ $pImg }}" alt="Foto Anda">
+                          </button>
+                          <button type="button" class="btn-delete-custom-img" onclick="deleteCustomImage(event)" title="Hapus foto ini" aria-label="Hapus foto">
+                            <i data-lucide="x" style="width:12px;height:12px;"></i>
+                          </button>
+                        </div>
+                      @endif
+                    </span>
+                    <button type="button" class="image-thumb-btn {{ (!$isCustomImg && $rawImg === 'assets/images/partner_doni.jpg') ? 'active' : '' }}" data-img="assets/images/partner_doni.jpg" onclick="selectPresetImage(this)" title="Peternakan Kambing / Domba">
                       <img src="{{ asset('assets/images/partner_doni.jpg') }}" alt="Peternakan Doni">
                     </button>
-                    <button type="button" class="image-thumb-btn" data-img="assets/images/partner_budi.jpg" onclick="selectPresetImage(this)" title="Peternakan Sapi">
+                    <button type="button" class="image-thumb-btn {{ (!$isCustomImg && $rawImg === 'assets/images/partner_budi.jpg') ? 'active' : '' }}" data-img="assets/images/partner_budi.jpg" onclick="selectPresetImage(this)" title="Peternakan Sapi">
                       <img src="{{ asset('assets/images/partner_budi.jpg') }}" alt="Peternakan Sapi">
                     </button>
-                    <button type="button" class="image-thumb-btn" data-img="assets/images/partner_adam.jpg" onclick="selectPresetImage(this)" title="Peternakan Unggas / Ayam">
+                    <button type="button" class="image-thumb-btn {{ (!$isCustomImg && $rawImg === 'assets/images/partner_adam.jpg') ? 'active' : '' }}" data-img="assets/images/partner_adam.jpg" onclick="selectPresetImage(this)" title="Peternakan Unggas / Ayam">
                       <img src="{{ asset('assets/images/partner_adam.jpg') }}" alt="Peternakan Ayam">
                     </button>
-                    <button type="button" class="image-thumb-btn" data-img="assets/images/partner_haris.jpg" onclick="selectPresetImage(this)" title="Biokonversi Maggot BSF">
+                    <button type="button" class="image-thumb-btn {{ (!$isCustomImg && $rawImg === 'assets/images/partner_haris.jpg') ? 'active' : '' }}" data-img="assets/images/partner_haris.jpg" onclick="selectPresetImage(this)" title="Biokonversi Maggot BSF">
                       <img src="{{ asset('assets/images/partner_haris.jpg') }}" alt="Maggot BSF">
                     </button>
-                    <button type="button" class="image-thumb-btn" data-img="assets/images/about_organic.jpg" onclick="selectPresetImage(this)" title="Pertanian Hortikultura">
+                    <button type="button" class="image-thumb-btn {{ (!$isCustomImg && $rawImg === 'assets/images/about_organic.jpg') ? 'active' : '' }}" data-img="assets/images/about_organic.jpg" onclick="selectPresetImage(this)" title="Pertanian Hortikultura">
                       <img src="{{ asset('assets/images/about_organic.jpg') }}" alt="Pertanian">
                     </button>
                   </div>
@@ -1722,6 +1781,41 @@
       updateLivePreview();
     }
 
+    function deleteCustomImage(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      const customSlot = document.getElementById('customImageSlot');
+      if (customSlot) {
+        customSlot.style.display = 'none';
+        customSlot.innerHTML = '';
+      }
+
+      const fileInput = document.getElementById('deviceFileInput');
+      if (fileInput) fileInput.value = '';
+
+      const btnRemove = document.getElementById('btnRemoveCustomPhoto');
+      if (btnRemove) btnRemove.style.display = 'none';
+
+      // Aktifkan kembali preset default (partner_doni)
+      const defaultPreset = document.querySelector('#imagePresetContainer .image-thumb-btn[data-img="assets/images/partner_doni.jpg"]') 
+        || document.querySelector('#imagePresetContainer .image-thumb-btn');
+
+      if (defaultPreset) {
+        selectPresetImage(defaultPreset);
+      } else {
+        const fallback = 'assets/images/partner_doni.jpg';
+        document.getElementById('editImg').value = fallback;
+        const avatar = document.getElementById('sidebarAvatarImg');
+        if (avatar) avatar.src = "{{ asset('assets/images/partner_doni.jpg') }}";
+        updateLivePreview();
+      }
+
+      showNotification('Foto kustom berhasil dihapus. Jangan lupa klik "Simpan Perubahan".', false);
+    }
+
     function handleDeviceImageUpload(event) {
       const file = event.target.files && event.target.files[0];
       if (!file) return;
@@ -1755,16 +1849,25 @@
 
           const customSlot = document.getElementById('customImageSlot');
           customSlot.innerHTML = `
-            <button type="button" class="image-thumb-btn active" data-img="${compressedDataUrl}" onclick="selectPresetImage(this)" title="Foto dari Perangkat Anda">
-              <img src="${compressedDataUrl}" alt="Foto Anda">
-            </button>
+            <div class="custom-thumb-wrapper">
+              <button type="button" class="image-thumb-btn active" data-img="${compressedDataUrl}" onclick="selectPresetImage(this)" title="Foto dari Perangkat Anda">
+                <img src="${compressedDataUrl}" alt="Foto Anda">
+              </button>
+              <button type="button" class="btn-delete-custom-img" onclick="deleteCustomImage(event)" title="Hapus foto unggahan ini" aria-label="Hapus foto">
+                <i data-lucide="x" style="width:12px;height:12px;"></i>
+              </button>
+            </div>
           `;
           customSlot.style.display = 'inline-flex';
+
+          const btnRemove = document.getElementById('btnRemoveCustomPhoto');
+          if (btnRemove) btnRemove.style.display = 'inline-flex';
 
           document.querySelectorAll('#imagePresetContainer .image-thumb-btn').forEach(btn => {
             if (btn.dataset.img !== compressedDataUrl) btn.classList.remove('active');
           });
 
+          if (window.lucide) lucide.createIcons();
           updateLivePreview();
         };
         tempImg.src = e.target.result;
