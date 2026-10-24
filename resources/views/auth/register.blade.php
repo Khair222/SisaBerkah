@@ -626,6 +626,7 @@
   </style>
 </head>
 <body class="auth-split-body">
+  @include('partials.preloader')
 
   <div id="authWarningPopup" class="auth-warning-popup" role="alert">
     <div class="auth-warning-popup-icon">

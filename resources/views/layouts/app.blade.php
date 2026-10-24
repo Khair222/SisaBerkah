@@ -53,6 +53,7 @@
 </head>
 
 <body class="@yield('body_class', '')">
+  @include('partials.preloader')
 
   <!-- ========== NAVBAR ========== -->
   <nav class="navbar" id="navbar">

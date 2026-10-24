@@ -657,6 +657,7 @@
   </style>
 </head>
 <body class="auth-split-body">
+  @include('partials.preloader')
 
   <!-- Floating Red Warning Pop-up -->
   <div id="authWarningPopup" class="auth-warning-popup" role="alert">

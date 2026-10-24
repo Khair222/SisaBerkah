@@ -754,6 +754,7 @@
   </style>
 </head>
 <body class="dashboard-body">
+  @include('partials.preloader')
 
   @php
     $pName = $profile->name ?? 'Peternakan Pak Doni';
