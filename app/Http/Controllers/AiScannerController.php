@@ -41,15 +41,17 @@ class AiScannerController extends Controller
                 $file = $request->file('image');
                 $filename = 'scan_' . time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
                 
-                // Pastikan direktori uploads/scans ada
+                $imageBinary = file_get_contents($file->getRealPath());
                 $destinationPath = public_path('uploads/scans');
-                if (!file_exists($destinationPath)) {
-                    mkdir($destinationPath, 0777, true);
+                try {
+                    if (!file_exists($destinationPath)) {
+                        @mkdir($destinationPath, 0777, true);
+                    }
+                    $file->move($destinationPath, $filename);
+                    $imageUrl = asset('uploads/scans/' . $filename);
+                } catch (\Throwable $e) {
+                    $imageUrl = 'data:' . $file->getClientMimeType() . ';base64,' . base64_encode($imageBinary);
                 }
-                
-                $file->move($destinationPath, $filename);
-                $imageUrl = asset('uploads/scans/' . $filename);
-                $imageBinary = file_get_contents(public_path('uploads/scans/' . $filename));
                 
                 // Analisis gambar
                 $analysisData = $this->analyzeImageContent($imageBinary, $imageUrl);
@@ -64,11 +66,15 @@ class AiScannerController extends Controller
 
                     $filename = 'camera_' . time() . '_' . Str::random(8) . '.' . $type;
                     $destinationPath = public_path('uploads/scans');
-                    if (!file_exists($destinationPath)) {
-                        mkdir($destinationPath, 0777, true);
+                    try {
+                        if (!file_exists($destinationPath)) {
+                            @mkdir($destinationPath, 0777, true);
+                        }
+                        file_put_contents($destinationPath . '/' . $filename, $base64Data);
+                        $imageUrl = asset('uploads/scans/' . $filename);
+                    } catch (\Throwable $e) {
+                        $imageUrl = 'data:image/' . $type . ';base64,' . base64_encode($base64Data);
                     }
-                    file_put_contents($destinationPath . '/' . $filename, $base64Data);
-                    $imageUrl = asset('uploads/scans/' . $filename);
                     $imageBinary = $base64Data;
 
                     $analysisData = $this->analyzeImageContent($imageBinary, $imageUrl);
