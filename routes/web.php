@@ -25,11 +25,13 @@ Route::post('/kelola-mitra/password', [MitraController::class, 'updatePassword']
 Route::post('/kelola-mitra/pasokan', [MitraController::class, 'storePasokan'])->name('mitra.pasokan.store');
 Route::post('/kelola-mitra/pasokan/{id}/update', [MitraController::class, 'updatePasokan'])->name('mitra.pasokan.update');
 Route::post('/kelola-mitra/pasokan/{id}/delete', [MitraController::class, 'deletePasokan'])->name('mitra.pasokan.delete');
+Route::post('/kelola-mitra/delete', [MitraController::class, 'deleteAccount'])->name('mitra.delete');
 
 // Profil Pengguna Biasa (Khusus Akun User)
 Route::get('/profil-saya', [UserController::class, 'profile'])->name('user.profile');
 Route::post('/profil-saya/update', [UserController::class, 'updateProfile'])->name('user.updateProfile');
 Route::post('/profil-saya/password', [UserController::class, 'updatePassword'])->name('user.updatePassword');
+Route::post('/profil-saya/delete', [UserController::class, 'deleteAccount'])->name('user.delete');
 
 // Auth (Login, Register, Logout)
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

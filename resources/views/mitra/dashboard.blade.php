@@ -1457,9 +1457,74 @@
             </a>
           </div>
 
+          <!-- Danger Zone Card: Hapus Akun Mitra -->
+          <div class="settings-card" style="border-color:#FECACA;background:#FFFBFB;grid-column:1 / -1;margin-top:0.5rem;">
+            <div class="settings-card-header">
+              <div style="width:40px;height:40px;border-radius:12px;background:#FEE2E2;color:#DC2626;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <i data-lucide="alert-octagon" style="width:22px;height:22px;"></i>
+              </div>
+              <div>
+                <div style="display:inline-flex;align-items:center;gap:0.35rem;background:rgba(239,68,68,0.12);color:#DC2626;padding:0.18rem 0.6rem;border-radius:9999px;font-size:0.7rem;font-weight:700;text-transform:uppercase;margin-bottom:0.25rem;">
+                  Zona Berbahaya
+                </div>
+                <h3 style="color:#991B1B;margin:0 0 2px;">Hapus Akun & Profil Usaha Mitra</h3>
+                <p style="color:#7F1D1D;margin:0;">Tindakan permanen untuk menghapus akun login dan profil mitra dari platform.</p>
+              </div>
+            </div>
+
+            <p style="font-size:0.86rem;color:#7F1D1D;line-height:1.55;margin:0 0 1.25rem;">
+              Menghapus akun ini akan menghapus data profil usaha <strong>{{ $pName }}</strong> secara permanen dari katalog publik SisaBerkah, beserta seluruh catatan pasokan masuk yang telah terdaftar. Tindakan ini tidak dapat dibatalkan.
+            </p>
+
+            <button type="button" onclick="openDeleteMitraModal()" style="display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.75rem 1.35rem;background:#DC2626;color:#FFFFFF;border:none;border-radius:10px;font-weight:700;font-size:0.88rem;cursor:pointer;box-shadow:0 3px 10px rgba(220,38,38,0.25);transition:background 0.2s ease;">
+              <i data-lucide="trash-2" style="width:16px;height:16px;"></i>
+              <span>Hapus Akun & Profil Usaha Mitra</span>
+            </button>
+          </div>
+
         </div>
       </section>
 
+    </div>
+  </div>
+
+  <!-- Modal Konfirmasi Hapus Akun Mitra -->
+  <div class="modal-overlay" id="deleteMitraModal" onclick="closeDeleteMitraModal()">
+    <div class="modal-card" style="max-width:480px;text-align:center;padding:2rem;" onclick="event.stopPropagation()">
+      <div style="width:56px;height:56px;border-radius:50%;background:#FEE2E2;color:#DC2626;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;">
+        <i data-lucide="alert-triangle" style="width:28px;height:28px;"></i>
+      </div>
+
+      <h3 style="font-family:var(--font-heading);font-size:1.25rem;font-weight:800;color:#0F172A;margin:0 0 0.5rem;">
+        Konfirmasi Hapus Akun Mitra
+      </h3>
+      <p style="font-size:0.88rem;color:#64748B;margin:0 0 1.5rem;line-height:1.5;">
+        Apakah Anda yakin ingin menghapus akun mitra <strong>{{ $pEmail }}</strong> beserta data profil usaha <strong>{{ $pName }}</strong>? Masukkan kata sandi akun Anda untuk konfirmasi:
+      </p>
+
+      <div id="deleteMitraModalAlert" style="display:none;padding:0.75rem 1rem;border-radius:10px;background:#FEF2F2;color:#991B1B;font-size:0.82rem;font-weight:600;margin-bottom:1.2rem;text-align:left;"></div>
+
+      <form onsubmit="handleConfirmDeleteMitra(event)">
+        <div class="form-group-custom" style="text-align:left;margin-bottom:1.5rem;">
+          <label class="form-label-custom" for="deleteMitraConfirmPassword">Kata Sandi Akun Mitra</label>
+          <div class="pwd-input-wrap">
+            <input type="password" id="deleteMitraConfirmPassword" class="form-input-custom" style="padding-left:1rem;padding-right:2.5rem;" required placeholder="Masukkan kata sandi akun Anda...">
+            <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('deleteMitraConfirmPassword', this)" aria-label="Lihat kata sandi">
+              <i data-lucide="eye" style="width:17px;height:17px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:0.75rem;">
+          <button type="button" class="btn-cancel-modal" onclick="closeDeleteMitraModal()" style="flex:1;">
+            Batal
+          </button>
+          <button type="submit" id="btnConfirmDeleteMitra" style="flex:1.2;padding:0.8rem 1rem;border-radius:10px;border:none;background:#DC2626;color:#FFFFFF;font-weight:700;font-size:0.88rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.4rem;">
+            <i data-lucide="trash-2" style="width:16px;height:16px;"></i>
+            <span>Ya, Hapus Permanen</span>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -2014,6 +2079,83 @@
       document.body.style.overflow = '';
     }
 
+    function openDeleteMitraModal() {
+      const modal = document.getElementById('deleteMitraModal');
+      const pwdInput = document.getElementById('deleteMitraConfirmPassword');
+      const alertBox = document.getElementById('deleteMitraModalAlert');
+      if (pwdInput) pwdInput.value = '';
+      if (alertBox) alertBox.style.display = 'none';
+      if (modal) modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      lucide.createIcons();
+      setTimeout(() => { if (pwdInput) pwdInput.focus(); }, 100);
+    }
+
+    function closeDeleteMitraModal() {
+      const modal = document.getElementById('deleteMitraModal');
+      if (modal) modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    async function handleConfirmDeleteMitra(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnConfirmDeleteMitra');
+      const pwdInput = document.getElementById('deleteMitraConfirmPassword');
+      const alertBox = document.getElementById('deleteMitraModalAlert');
+      const password = pwdInput ? pwdInput.value.trim() : '';
+
+      if (!password) {
+        if (alertBox) {
+          alertBox.textContent = 'Silakan ketikkan kata sandi akun mitra Anda.';
+          alertBox.style.display = 'block';
+        }
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span>Menghapus Akun...</span>';
+      if (alertBox) alertBox.style.display = 'none';
+
+      try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const res = await fetch("{{ route('mitra.delete') }}", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ password: password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          closeDeleteMitraModal();
+          showNotification(data.message || 'Akun Mitra berhasil dihapus.', false);
+          setTimeout(() => {
+            window.location.href = data.redirect || "{{ route('login') }}";
+          }, 1200);
+        } else {
+          if (alertBox) {
+            alertBox.textContent = data.message || 'Gagal menghapus akun. Periksa kata sandi Anda.';
+            alertBox.style.display = 'block';
+          }
+          btn.disabled = false;
+          btn.innerHTML = '<i data-lucide="trash-2" style="width:16px;height:16px;"></i><span>Ya, Hapus Permanen</span>';
+          lucide.createIcons();
+        }
+      } catch (err) {
+        if (alertBox) {
+          alertBox.textContent = 'Terjadi kesalahan jaringan atau server.';
+          alertBox.style.display = 'block';
+        }
+        btn.disabled = false;
+        btn.innerHTML = '<i data-lucide="trash-2" style="width:16px;height:16px;"></i><span>Ya, Hapus Permanen</span>';
+        lucide.createIcons();
+      }
+    }
+
     // ==========================================
     // PASOKAN MASUK CRUD JAVASCRIPT HANDLERS
     // ==========================================
@@ -2356,6 +2498,7 @@
         closeTestModal();
         closePasokanModal();
         closeDeletePasokanModal();
+        closeDeleteMitraModal();
       }
     });
 

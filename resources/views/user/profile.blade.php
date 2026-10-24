@@ -163,6 +163,74 @@
 
     </div>
 
+    <!-- Danger Zone Card: Hapus Akun -->
+    <div style="margin-top: 2rem; background: #FFF5F5; border: 1.5px solid #FECACA; border-radius: 18px; padding: 2rem; box-shadow: 0 4px 16px rgba(239, 68, 68, 0.05); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
+      <div style="display: flex; align-items: flex-start; gap: 1rem; max-width: 650px;">
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: #FEE2E2; color: #DC2626; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;">
+          <i data-lucide="alert-octagon" style="width: 22px; height: 22px;"></i>
+        </div>
+        <div>
+          <div style="display: inline-flex; align-items: center; gap: 0.35rem; background: rgba(239, 68, 68, 0.12); color: #DC2626; padding: 0.2rem 0.65rem; border-radius: 9999px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.35rem;">
+            Zona Berbahaya
+          </div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: #991B1B; margin: 0 0 0.3rem;">
+            Hapus Akun Pengguna Secara Permanen
+          </h3>
+          <p style="font-size: 0.85rem; color: #7F1D1D; margin: 0; line-height: 1.5;">
+            Tindakan ini tidak dapat dibatalkan. Seluruh data profil akun personal Anda akan dihapus secara permanen dari basis data SisaBerkah.
+          </p>
+        </div>
+      </div>
+
+      <button type="button" onclick="openDeleteModal()" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #DC2626; color: #FFFFFF; padding: 0.8rem 1.4rem; border-radius: 12px; font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25); transition: background 0.2s ease;">
+        <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+        <span>Hapus Akun Saya</span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal Konfirmasi Hapus Akun -->
+<div id="deleteUserModal" style="display: none; position: fixed; inset: 0; z-index: 99999; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 1.5rem;">
+  <div style="background: #FFFFFF; border-radius: 20px; max-width: 460px; width: 100%; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); text-align: center; position: relative;">
+    
+    <div style="width: 56px; height: 56px; border-radius: 50%; background: #FEE2E2; color: #DC2626; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
+      <i data-lucide="alert-triangle" style="width: 28px; height: 28px;"></i>
+    </div>
+
+    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: #0F172A; margin: 0 0 0.5rem;">
+      Konfirmasi Hapus Akun
+    </h3>
+    <p style="font-size: 0.88rem; color: #64748B; margin: 0 0 1.5rem; line-height: 1.5;">
+      Apakah Anda yakin ingin menghapus akun <strong>{{ $user->email }}</strong>? Untuk keamanan, silakan masukkan kata sandi Anda:
+    </p>
+
+    <div id="deleteModalAlert" style="display: none; padding: 0.75rem 1rem; border-radius: 10px; background: #FEF2F2; color: #991B1B; font-size: 0.82rem; font-weight: 600; margin-bottom: 1.2rem; text-align: left;"></div>
+
+    <form onsubmit="handleConfirmDelete(event)">
+      <div style="margin-bottom: 1.5rem; text-align: left;">
+        <label for="deleteConfirmPassword" style="display: block; font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 0.45rem;">
+          Kata Sandi Akun
+        </label>
+        <div style="position: relative;">
+          <input type="password" id="deleteConfirmPassword" required placeholder="Masukkan kata sandi Anda..." style="width: 100%; padding: 0.75rem 2.5rem 0.75rem 1rem; border-radius: 10px; border: 1.5px solid #CBD5E1; font-size: 0.92rem; outline: none; box-sizing: border-box;">
+          <button type="button" onclick="togglePasswordVisibility('deleteConfirmPassword', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94A3B8; cursor: pointer; padding: 0;" aria-label="Lihat kata sandi">
+            <i data-lucide="eye" style="width: 17px; height: 17px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem;">
+        <button type="button" onclick="closeDeleteModal()" style="flex: 1; padding: 0.8rem 1rem; border-radius: 10px; border: 1px solid #CBD5E1; background: #FFFFFF; color: #475569; font-weight: 700; font-size: 0.88rem; cursor: pointer;">
+          Batal
+        </button>
+        <button type="submit" id="btnConfirmDelete" style="flex: 1.2; padding: 0.8rem 1rem; border-radius: 10px; border: none; background: #DC2626; color: #FFFFFF; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+          <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+          <span>Ya, Hapus Akun</span>
+        </button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -286,6 +354,73 @@
     } finally {
       btn.disabled = false;
       btn.innerHTML = '<i data-lucide="key" style="width: 16px; height: 16px;"></i><span>Perbarui Kata Sandi</span>';
+      if (window.lucide) lucide.createIcons();
+    }
+  }
+
+  function openDeleteModal() {
+    const modal = document.getElementById('deleteUserModal');
+    const pwdInput = document.getElementById('deleteConfirmPassword');
+    const alertBox = document.getElementById('deleteModalAlert');
+    pwdInput.value = '';
+    alertBox.style.display = 'none';
+    modal.style.display = 'flex';
+    if (window.lucide) lucide.createIcons();
+    setTimeout(() => pwdInput.focus(), 100);
+  }
+
+  function closeDeleteModal() {
+    document.getElementById('deleteUserModal').style.display = 'none';
+  }
+
+  async function handleConfirmDelete(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnConfirmDelete');
+    const pwdInput = document.getElementById('deleteConfirmPassword');
+    const alertBox = document.getElementById('deleteModalAlert');
+    const password = pwdInput.value.trim();
+
+    if (!password) {
+      alertBox.textContent = 'Silakan ketikkan kata sandi Anda.';
+      alertBox.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span>Menghapus Akun...</span>';
+    alertBox.style.display = 'none';
+
+    try {
+      const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      const res = await fetch("{{ route('user.delete') }}", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': csrf,
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ password: password })
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        closeDeleteModal();
+        showProfileAlert(data.message || 'Akun Anda berhasil dihapus.', true);
+        setTimeout(() => {
+          window.location.href = data.redirect || "{{ route('login') }}";
+        }, 1200);
+      } else {
+        alertBox.textContent = data.message || 'Gagal menghapus akun. Periksa kata sandi Anda.';
+        alertBox.style.display = 'block';
+        btn.disabled = false;
+        btn.innerHTML = '<i data-lucide="trash-2" style="width: 16px; height: 16px;"></i><span>Ya, Hapus Akun</span>';
+        if (window.lucide) lucide.createIcons();
+      }
+    } catch (err) {
+      alertBox.textContent = 'Terjadi kesalahan jaringan atau server.';
+      alertBox.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = '<i data-lucide="trash-2" style="width: 16px; height: 16px;"></i><span>Ya, Hapus Akun</span>';
       if (window.lucide) lucide.createIcons();
     }
   }

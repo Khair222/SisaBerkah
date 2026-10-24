@@ -292,4 +292,53 @@ class MitraController extends Controller
             'message' => 'Catatan pasokan berhasil dihapus.'
         ]);
     }
+
+    /**
+     * Hapus akun Admin Mitra dan data profil usaha secara permanen.
+     */
+    public function deleteAccount(Request $request)
+    {
+        $admin = Auth::guard('mitra')->user();
+        if (!$admin) {
+            return response()->json(['success' => false, 'message' => 'Sesi Admin Mitra telah berakhir.'], 401);
+        }
+
+        $password = $request->input('password');
+        if (empty($password)) {
+            return response()->json(['success' => false, 'message' => 'Masukkan kata sandi untuk mengonfirmasi penghapusan akun.'], 422);
+        }
+
+        if (!Hash::check($password, $admin->password)) {
+            return response()->json(['success' => false, 'message' => 'Kata sandi konfirmasi tidak sesuai.'], 422);
+        }
+
+        // Cari profil usaha terkait
+        $profile = null;
+        if ($admin->mitra_id) {
+            $profile = MitraProfile::find($admin->mitra_id);
+        }
+        if (!$profile) {
+            $profile = MitraProfile::where('user_id', $admin->id)->first();
+        }
+
+        // Hapus pasokan masuk dan profil mitra jika ada
+        if ($profile) {
+            PasokanMasuk::where('mitra_id', $profile->id)->delete();
+            $profile->delete();
+        }
+
+        // Hapus akun admin mitra
+        $admin->delete();
+
+        // Logout dan bersihkan sesi
+        Auth::guard('mitra')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Akun Admin Mitra dan profil usaha Anda berhasil dihapus secara permanen dari SisaBerkah.',
+            'redirect' => route('login', ['role' => 'mitra'])
+        ]);
+    }
 }

@@ -92,4 +92,38 @@ class UserController extends Controller
             'message' => 'Kata sandi Anda berhasil diperbarui!'
         ]);
     }
+
+    /**
+     * Hapus akun pengguna (User) secara permanen.
+     */
+    public function deleteAccount(Request $request)
+    {
+        $user = Auth::guard('web')->user();
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Sesi login telah berakhir.'], 401);
+        }
+
+        $password = $request->input('password');
+        if (empty($password)) {
+            return response()->json(['success' => false, 'message' => 'Masukkan kata sandi untuk mengonfirmasi penghapusan akun.'], 422);
+        }
+
+        if (!Hash::check($password, $user->password)) {
+            return response()->json(['success' => false, 'message' => 'Kata sandi konfirmasi tidak sesuai.'], 422);
+        }
+
+        // Hapus pengguna secara permanen
+        $user->delete();
+
+        // Logout dan bersihkan sesi
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Akun Anda berhasil dihapus secara permanen dari SisaBerkah.',
+            'redirect' => route('login', ['role' => 'user'])
+        ]);
+    }
 }
