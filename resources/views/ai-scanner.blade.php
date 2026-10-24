@@ -1604,7 +1604,7 @@
           mDiv.innerHTML = `
             <div>
               <div class="mitra-card-top">
-                <img src="${m.image_url || '{{ asset("assets/images/partner_adam.jpg") }}'}" alt="${m.name}" class="mitra-thumb">
+                <img src="${m.image_url || '{{ asset("assets/images/partner_adam.jpg") }}'}" alt="${m.name}" class="mitra-thumb" onerror="this.src='{{ asset('assets/images/partner_adam.jpg') }}'">
                 <div>
                   <span class="mitra-category-pill">${m.category}</span>
                   <h4 class="mitra-name">${m.name}</h4>

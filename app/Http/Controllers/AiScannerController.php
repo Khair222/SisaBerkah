@@ -622,7 +622,7 @@ Kembalikan analisis dalam format JSON valid dengan struktur:
                 'location' => $m->location,
                 'whatsapp' => $m->whatsapp,
                 'materials_needed' => $m->materials_needed,
-                'image_url' => $m->image_url,
+                'image_url' => $m->display_image,
                 'detail_url' => route('mitra.detail', $m->id)
             ];
         });

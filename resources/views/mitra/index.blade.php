@@ -63,7 +63,7 @@
 
           <div class="home-partner-card" id="{{ $mitra->id }}" data-category="{{ $mitra->category }}">
             <div class="home-partner-img">
-              <img src="{{ asset($mitra->image_url ?: 'assets/images/partner_doni.jpg') }}" alt="{{ $mitra->name }}" loading="lazy">
+              <img src="{{ $mitra->display_image }}" alt="{{ $mitra->name }}" loading="lazy" onerror="this.src='{{ asset('assets/images/partner_doni.jpg') }}'">
               <span class="home-partner-badge">{{ $mitra->category }}</span>
             </div>
             <div class="home-partner-body">
@@ -134,11 +134,11 @@
       `Apakah saat ini masih menerima pasokan baru? Jika berkenan, kami ingin mendiskusikan perkiraan volume, jadwal penjemputan, serta ketentuan kualitas bahannya. Terima kasih banyak atas waktu dan perhatiannya.`
     );
     const waUrl = `https://wa.me/${cleanWa}?text=${waMsg}`;
-    const imgUrl = data.image_url ? `{{ asset('') }}${data.image_url.replace(/^\//, '')}` : '{{ asset("assets/images/partner_doni.jpg") }}';
+    const imgUrl = data.display_image || (data.image_url ? (data.image_url.startsWith('data:') || data.image_url.startsWith('http') ? data.image_url : `{{ asset('') }}${data.image_url.replace(/^\//, '')}`) : '{{ asset("assets/images/partner_doni.jpg") }}');
 
     body.innerHTML = `
       <div style="position:relative;height:240px;border-radius:var(--radius-xl);overflow:hidden;margin-bottom:1.5rem;">
-        <img src="${imgUrl}" alt="${data.name}" style="width:100%;height:100%;object-fit:cover;">
+        <img src="${imgUrl}" alt="${data.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='{{ asset('assets/images/partner_doni.jpg') }}'">
         <span class="home-partner-badge" style="top:16px;right:16px;">${data.category}</span>
       </div>
       <h2 style="font-family:var(--font-heading);font-size:1.6rem;font-weight:800;color:var(--color-text);margin-bottom:0.25rem;">${data.name}</h2>

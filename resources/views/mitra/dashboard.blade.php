@@ -807,16 +807,14 @@
       'assets/images/partner_haris.jpg',
       'assets/images/about_organic.jpg',
     ];
-    $rawImg = $profile->image ?? 'assets/images/partner_doni.jpg';
-    $isCustomImg = !empty($profile->image) && !in_array($profile->image, $presetImages);
+    $rawImg = $profile->image_url ?: ($profile->image ?: 'assets/images/partner_doni.jpg');
+    $isCustomImg = !empty($rawImg) && !in_array($rawImg, $presetImages);
 
     $pName = $profile->name ?? 'Peternakan Pak Doni';
     $pOwner = $profile->owner ?? 'Pak Doni Prasetyo';
     $pEmail = $user->email ?? 'doni@sisaberkah.id';
     $pId = $profile->id ?? 'doni';
-    $pImg = (str_starts_with($profile->image ?? '', 'http') || str_starts_with($profile->image ?? '', 'assets/')) 
-      ? asset($profile->image) 
-      : ($profile->image ? asset('storage/' . $profile->image) : asset('assets/images/partner_doni.jpg'));
+    $pImg = $profile->display_image ?? asset('assets/images/partner_doni.jpg');
     $pCat = $profile->category ?? 'Peternakan';
     $pLoc = $profile->location ?? 'Pakem, Sleman';
     $pFullLoc = $profile->full_location ?? $profile->location ?? 'Pakem, Sleman, D.I. Yogyakarta';
@@ -1168,7 +1166,7 @@
                       <img src="{{ asset('assets/images/about_organic.jpg') }}" alt="Pertanian">
                     </button>
                   </div>
-                  <input type="hidden" id="editImg" value="{{ $profile->image ?? 'assets/images/partner_doni.jpg' }}">
+                  <input type="hidden" id="editImg" value="{{ $rawImg }}">
                 </div>
 
               </div>
@@ -1827,7 +1825,7 @@
           const canvas = document.createElement('canvas');
           let width = tempImg.width;
           let height = tempImg.height;
-          const maxDim = 900;
+          const maxDim = 800;
           if (width > maxDim || height > maxDim) {
             if (width > height) {
               height = Math.round((height * maxDim) / width);
@@ -1842,7 +1840,7 @@
           const ctx = canvas.getContext('2d');
           ctx.drawImage(tempImg, 0, 0, width, height);
 
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
 
           document.getElementById('editImg').value = compressedDataUrl;
           document.getElementById('sidebarAvatarImg').src = compressedDataUrl;

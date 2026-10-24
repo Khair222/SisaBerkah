@@ -452,12 +452,11 @@
           @php
             $waMsg = "Halo {$m->owner} ({$m->name}), salam kenal.\n\nSaya mendapatkan informasi kontak Bapak/Ibu melalui platform SisaBerkah terkait kebutuhan bahan organik berupa \"{$m->materials_needed}\".\n\nKebetulan kami memiliki pasokan bahan organik terpilah dan segar yang siap disalurkan secara rutin untuk mendukung {$m->name}.\n\nApakah saat ini masih menerima pasokan baru? Jika berkenan, kami ingin mendiskusikan perkiraan volume, jadwal penjemputan, serta ketentuan kualitas bahannya. Terima kasih banyak atas waktu dan perhatiannya.";
             $waLink = "https://wa.me/" . preg_replace('/[^0-9]/', '', $m->whatsapp) . "?text=" . rawurlencode($waMsg);
-            $imgCol = $m->image_url ?: $m->image;
-            $imgSrc = (str_starts_with($imgCol ?? '', 'http') || str_starts_with($imgCol ?? '', 'assets/')) ? asset($imgCol) : ($imgCol ? asset('storage/' . $imgCol) : asset('assets/images/partner_doni.jpg'));
+            $imgSrc = $m->display_image;
           @endphp
           <div class="home-partner-card fade-in" data-partner-id="{{ $m->id }}" style="transition-delay: {{ $idx * 0.1 }}s;">
             <div class="home-partner-img">
-              <img src="{{ $imgSrc }}" alt="{{ $m->name }}" loading="lazy" onerror="this.src='{{ asset('assets/images/partner_budi.jpg') }}'">
+              <img src="{{ $imgSrc }}" alt="{{ $m->name }}" loading="lazy" onerror="this.src='{{ asset('assets/images/partner_doni.jpg') }}'">
               <span class="home-partner-badge">{{ $m->category }}</span>
             </div>
             <div class="home-partner-body">
@@ -802,7 +801,7 @@
         'owner' => $item->owner,
         'cat' => $item->category,
         'loc' => $item->location,
-        'img' => (str_starts_with($item->image, 'http') || str_starts_with($item->image, 'assets/')) ? asset($item->image) : asset('storage/' . $item->image),
+        'img' => $item->display_image,
         'need' => $item->materials_needed,
         'desc' => $item->description,
         'amount' => $item->estimated_amount,
