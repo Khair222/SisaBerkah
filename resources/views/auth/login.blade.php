@@ -814,6 +814,19 @@
         setRole(currentRole || 'mitra');
       }
 
+      // Deteksi jika baru selesai mendaftar akun
+      const registered = urlParams.get('registered');
+      const emailParam = urlParams.get('email');
+      if (registered) {
+        if (emailParam) {
+          const emailInput = document.getElementById('loginEmail');
+          if (emailInput) emailInput.value = emailParam;
+          const pwdInput = document.getElementById('loginPassword');
+          if (pwdInput) pwdInput.focus();
+        }
+        showAlert('Pendaftaran akun berhasil! Silakan masukkan kata sandi Anda untuk masuk ke sistem.', false, 'Pendaftaran Berhasil');
+      }
+
       if (window.lucide) {
         lucide.createIcons();
       }

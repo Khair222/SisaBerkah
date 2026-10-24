@@ -156,12 +156,10 @@ class AuthController extends Controller
                 'status' => 'active',
             ]);
 
-            Auth::guard('mitra')->login($admin);
-
             return response()->json([
                 'success' => true,
-                'message' => 'Pendaftaran Akun Mitra berhasil!',
-                'redirect' => route('mitra.dashboard'),
+                'message' => 'Pendaftaran Akun Mitra berhasil! Mengalihkan ke halaman masuk...',
+                'redirect' => route('login', ['role' => 'mitra', 'registered' => 1, 'email' => $email]),
             ]);
         } else {
             if (User::where('email', $email)->exists()) {
@@ -178,12 +176,10 @@ class AuthController extends Controller
                 'password' => Hash::make($password),
             ]);
 
-            Auth::guard('web')->login($user);
-
             return response()->json([
                 'success' => true,
-                'message' => 'Pendaftaran akun berhasil!',
-                'redirect' => route('user.profile'),
+                'message' => 'Pendaftaran akun berhasil! Mengalihkan ke halaman masuk...',
+                'redirect' => route('login', ['role' => 'user', 'registered' => 1, 'email' => $email]),
             ]);
         }
     }
