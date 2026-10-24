@@ -994,6 +994,189 @@
     background: #F9FAFB;
     border-color: #9CA3AF;
   }
+
+  @media (max-width: 768px) {
+    .scanner-page {
+      padding: 1.75rem 0 3.5rem;
+    }
+
+    .scanner-hero {
+      margin-bottom: 1.75rem;
+    }
+
+    .scanner-hero h1 {
+      font-size: 1.65rem;
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .scanner-hero p {
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .scanner-card {
+      border-radius: 18px;
+      margin-bottom: 2rem;
+    }
+
+    .scanner-tabs {
+      gap: 0.35rem;
+      padding: 0.35rem;
+    }
+
+    .scanner-tab-btn {
+      padding: 0.65rem 0.75rem;
+      font-size: 0.82rem;
+      border-radius: 10px;
+    }
+
+    .camera-box {
+      border-radius: 14px;
+      max-height: 320px;
+    }
+
+    .camera-actions {
+      flex-direction: column;
+      width: 100%;
+      gap: 0.65rem;
+    }
+
+    .btn-camera-capture,
+    .btn-browse {
+      width: 100%;
+      justify-content: center;
+      padding: 0.75rem 1rem;
+      box-sizing: border-box;
+    }
+
+    .upload-dropzone {
+      min-height: 200px;
+      border-radius: 14px;
+      padding: 1.5rem 1rem;
+    }
+
+    .dropzone-title {
+      font-size: 1rem;
+    }
+
+    .dropzone-subtitle {
+      font-size: 0.78rem;
+    }
+
+    /* Scanning / Loading laser animation on mobile */
+    .scanning-overlay {
+      padding: 2rem 1rem;
+    }
+
+    .scanning-preview-box {
+      width: min(240px, 75vw);
+      height: min(240px, 75vw);
+      border-radius: 16px;
+      margin-bottom: 1.35rem;
+    }
+
+    .scanning-pulse {
+      font-size: 0.82rem;
+      padding: 0.45rem 1rem;
+    }
+
+    .scanning-step-text {
+      font-size: 0.8rem;
+    }
+
+    .result-hero-card {
+      grid-template-columns: 1fr;
+      padding: 1.25rem 1rem;
+      border-radius: 16px;
+      gap: 1.25rem;
+    }
+
+    .result-img-box {
+      max-width: 200px;
+      margin: 0 auto;
+    }
+
+    .suit-grid {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .handling-guide-card {
+      padding: 1.35rem 1rem;
+      border-radius: 16px;
+    }
+
+    .handling-guide-card h2 {
+      font-size: 1.25rem;
+    }
+
+    .handling-step-item {
+      padding: 0.85rem 1rem;
+      gap: 0.75rem;
+    }
+
+    .mitra-cards-wrap {
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+    }
+
+    .scanner-mitra-card {
+      padding: 1rem;
+      border-radius: 14px;
+    }
+
+    .mitra-btn-grid {
+      grid-template-columns: 1fr;
+      gap: 0.45rem;
+    }
+
+    .btn-wa-direct,
+    .btn-profile-direct {
+      width: 100%;
+      padding: 0.65rem;
+      box-sizing: border-box;
+    }
+
+    .impact-banner {
+      padding: 1.25rem 1rem;
+      flex-direction: column;
+      text-align: center;
+      border-radius: 14px;
+      gap: 0.85rem;
+    }
+
+    .impact-stat-pill {
+      width: 100%;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .action-buttons-wrap {
+      flex-direction: column;
+      width: 100%;
+      gap: 0.65rem;
+    }
+
+    .btn-scan-again,
+    .btn-print-summary {
+      width: 100%;
+      justify-content: center;
+      box-sizing: border-box;
+      padding: 0.8rem 1.25rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .scanner-hero h1 {
+      font-size: 1.45rem;
+    }
+
+    .scanner-badge-pill {
+      font-size: 0.72rem;
+      padding: 0.28rem 0.75rem;
+    }
+  }
 </style>
 @endsection
 

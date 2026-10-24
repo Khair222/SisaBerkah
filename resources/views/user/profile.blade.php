@@ -3,39 +3,130 @@
 @section('title', 'Profil Saya — SISABERKAH')
 @section('meta_description', 'Kelola informasi profil akun pengguna, identitas pribadi, dan keamanan kata sandi di platform SisaBerkah.')
 
+@section('styles')
+<style>
+  .user-profile-wrapper {
+    background-color: #F4F6F4;
+    min-height: 85vh;
+    padding: 2.5rem 0 4.5rem;
+  }
+  .user-hero-banner {
+    background: linear-gradient(135deg, #062817 0%, #03180F 100%);
+    border: 1px solid rgba(34, 197, 94, 0.24);
+    border-radius: 20px;
+    padding: 2.25rem 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(4, 20, 13, 0.12);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .user-profile-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.75rem;
+  }
+  .user-card-box {
+    background: #FFFFFF;
+    border: 1px solid #E2E8E2;
+    border-radius: 18px;
+    padding: 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+  }
+  .user-danger-zone {
+    margin-top: 2rem;
+    background: #FFF5F5;
+    border: 1.5px solid #FECACA;
+    border-radius: 18px;
+    padding: 2rem;
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .user-profile-wrapper {
+      padding: 1.5rem 0 3rem;
+    }
+    .user-hero-banner {
+      padding: 1.35rem 1.15rem;
+      border-radius: 16px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .user-hero-banner a {
+      width: 100%;
+      justify-content: center;
+    }
+    .user-profile-cards-grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    .user-card-box {
+      padding: 1.35rem 1.15rem;
+      border-radius: 16px;
+    }
+    .user-danger-zone {
+      padding: 1.35rem 1.15rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      border-radius: 16px;
+    }
+    .user-danger-zone button {
+      width: 100%;
+      justify-content: center;
+    }
+    #deleteUserModal > div {
+      padding: 1.5rem 1.15rem !important;
+      border-radius: 18px !important;
+      max-width: 92vw !important;
+    }
+  }
+</style>
+@endsection
+
 @section('content')
-<div style="background-color: #F4F6F4; min-height: 85vh; padding: 2.5rem 0 4.5rem;">
-  <div class="container" style="max-width: 1050px; margin: 0 auto; padding: 0 1.5rem;">
+<div class="user-profile-wrapper">
+  <div class="container" style="max-width: 1050px; margin: 0 auto; padding: 0 1.25rem;">
 
     <!-- Breadcrumb -->
-    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #64748B; margin-bottom: 1.5rem;">
+    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #64748B; margin-bottom: 1.25rem;">
       <a href="{{ route('home') }}" style="color: #64748B; text-decoration: none;">Beranda</a>
       <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>
       <span style="color: #10B981; font-weight: 600;">Profil Pengguna</span>
     </div>
 
     <!-- User Hero Banner -->
-    <div style="background: linear-gradient(135deg, #062817 0%, #03180F 100%); border: 1px solid rgba(34, 197, 94, 0.24); border-radius: 20px; padding: 2.25rem 2.5rem; margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(4, 20, 13, 0.12); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
+    <div class="user-hero-banner">
       
-      <div style="display: flex; align-items: center; gap: 1.25rem;">
-        <div style="width: 68px; height: 68px; border-radius: 50%; background: rgba(34, 197, 94, 0.2); border: 2px solid #22C55E; display: flex; align-items: center; justify-content: center; color: #FFFFFF; flex-shrink: 0;">
-          <i data-lucide="user" style="width: 34px; height: 34px;"></i>
+      <div style="display: flex; align-items: center; gap: 1.15rem;">
+        <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(34, 197, 94, 0.2); border: 2px solid #22C55E; display: flex; align-items: center; justify-content: center; color: #FFFFFF; flex-shrink: 0;">
+          <i data-lucide="user" style="width: 30px; height: 30px;"></i>
         </div>
         <div>
           <div style="display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); padding: 0.2rem 0.65rem; border-radius: 9999px; font-size: 0.72rem; font-weight: 700; color: #4ADE80; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.4rem;">
             <i data-lucide="check-circle" style="width: 12px; height: 12px;"></i>
             <span>Akun Pengguna Terverifikasi</span>
           </div>
-          <h1 style="font-family: var(--font-heading); font-size: 1.65rem; font-weight: 800; color: #FFFFFF; margin: 0 0 0.25rem; letter-spacing: -0.3px;">
+          <h1 style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; color: #FFFFFF; margin: 0 0 0.25rem; letter-spacing: -0.3px;">
             Halo, <span id="heroUserName">{{ $user->name }}</span>!
           </h1>
-          <p style="font-size: 0.88rem; color: rgba(255, 255, 255, 0.8); margin: 0;">
+          <p style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.8); margin: 0;">
             Kelola data akun personal Anda untuk berpartisipasi menyalurkan limbah organik.
           </p>
         </div>
       </div>
 
-      <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem; width: auto;">
         <a href="{{ route('mitra.index') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #22C55E; color: #04140D; padding: 0.7rem 1.25rem; border-radius: 12px; font-weight: 700; font-size: 0.88rem; text-decoration: none; box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35); transition: transform 0.2s ease;">
           <i data-lucide="search" style="width: 16px; height: 16px;"></i>
           <span>Cari Mitra Penerima</span>
@@ -47,10 +138,10 @@
     <div id="userProfileAlert" style="display: none; padding: 1rem 1.25rem; border-radius: 12px; margin-bottom: 1.75rem; font-size: 0.9rem; font-weight: 600;"></div>
 
     <!-- Profile Grid Layout -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.75rem;">
+    <div class="user-profile-cards-grid">
 
       <!-- Card 1: Edit Informasi Profil -->
-      <div style="background: #FFFFFF; border: 1px solid #E2E8E2; border-radius: 18px; padding: 2rem; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);">
+      <div class="user-card-box">
         <div style="display: flex; align-items: center; gap: 0.75rem; padding-bottom: 1.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid #E2E8E2;">
           <div style="width: 42px; height: 42px; border-radius: 12px; background: #ECFDF5; color: #059669; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
             <i data-lucide="user-pen" style="width: 22px; height: 22px;"></i>
@@ -102,14 +193,14 @@
       </div>
 
       <!-- Card 2: Perbarui Kata Sandi -->
-      <div style="background: #FFFFFF; border: 1px solid #E2E8E2; border-radius: 18px; padding: 2rem; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);">
+      <div class="user-card-box">
         <div style="display: flex; align-items: center; gap: 0.75rem; padding-bottom: 1.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid #E2E8E2;">
           <div style="width: 42px; height: 42px; border-radius: 12px; background: #FEF3C7; color: #D97706; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
             <i data-lucide="shield-check" style="width: 22px; height: 22px;"></i>
           </div>
           <div>
             <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: #0F172A; margin: 0 0 2px;">
-              Keamanan & Kata Sandi
+              Keamanan &amp; Kata Sandi
             </h3>
             <p style="font-size: 0.82rem; color: #64748B; margin: 0;">
               Ubah kata sandi secara berkala untuk menjaga akun tetap aman.
@@ -164,7 +255,7 @@
     </div>
 
     <!-- Danger Zone Card: Hapus Akun -->
-    <div style="margin-top: 2rem; background: #FFF5F5; border: 1.5px solid #FECACA; border-radius: 18px; padding: 2rem; box-shadow: 0 4px 16px rgba(239, 68, 68, 0.05); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
+    <div class="user-danger-zone">
       <div style="display: flex; align-items: flex-start; gap: 1rem; max-width: 650px;">
         <div style="width: 44px; height: 44px; border-radius: 12px; background: #FEE2E2; color: #DC2626; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;">
           <i data-lucide="alert-octagon" style="width: 22px; height: 22px;"></i>

@@ -737,6 +737,183 @@
       }
     }
 
+    @media (max-width: 768px) {
+      .dashboard-header-bar {
+        padding: 0.85rem 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.65rem;
+        position: static;
+      }
+
+      .header-welcome-col h1 {
+        font-size: 1.15rem;
+      }
+
+      .header-welcome-col p {
+        font-size: 0.78rem;
+      }
+
+      .header-action-col {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .header-mitra-badge {
+        font-size: 0.72rem;
+        padding: 0.28rem 0.65rem;
+        max-width: 160px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .header-web-btn {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.75rem;
+      }
+
+      .dashboard-workspace-body {
+        padding: 1rem 0.85rem 2.5rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
+      }
+
+      .overview-hero-banner {
+        padding: 1.35rem 1.15rem;
+        border-radius: 15px;
+        margin-bottom: 1.25rem;
+      }
+
+      .overview-hero-text h2 {
+        font-size: 1.25rem;
+        line-height: 1.25;
+      }
+
+      .overview-hero-text p {
+        font-size: 0.82rem;
+        line-height: 1.5;
+      }
+
+      .overview-hero-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+      }
+
+      .btn-hero-primary,
+      .btn-hero-secondary {
+        width: 100%;
+        justify-content: center;
+        padding: 0.7rem 1rem;
+        font-size: 0.84rem;
+        box-sizing: border-box;
+      }
+
+      .overview-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .stat-metric-card {
+        padding: 1rem;
+        border-radius: 14px;
+      }
+
+      .stat-icon-wrap {
+        width: 42px;
+        height: 42px;
+        border-radius: 11px;
+      }
+
+      .stat-value-text {
+        font-size: 1.05rem;
+      }
+
+      .settings-card {
+        padding: 1.25rem 1rem;
+        border-radius: 15px;
+      }
+
+      .settings-card-header {
+        margin-bottom: 1.15rem;
+        padding-bottom: 0.75rem;
+      }
+
+      .settings-card-header h3 {
+        font-size: 1.02rem;
+      }
+
+      .pasokan-table-card {
+        padding: 1rem 0.85rem;
+        border-radius: 14px;
+      }
+
+      .pasokan-filter-pills-row,
+      .filter-pills-scroll {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 6px;
+        gap: 0.45rem;
+        scrollbar-width: none;
+      }
+
+      .pasokan-filter-pills-row::-webkit-scrollbar,
+      .filter-pills-scroll::-webkit-scrollbar {
+        display: none;
+      }
+
+      .pasokan-filter-pill {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 0.35rem 0.75rem;
+        font-size: 0.75rem;
+      }
+
+      .pasokan-table-wrap,
+      .dash-table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 0.75rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .mobile-dash-header {
+        padding: 0.65rem 0.85rem;
+      }
+
+      .mobile-dash-logo {
+        height: 24px;
+      }
+
+      .mobile-dash-header .header-mitra-badge {
+        display: none;
+      }
+
+      .dashboard-sidebar {
+        width: 86vw;
+        max-width: 300px;
+      }
+
+      .dashboard-workspace-body {
+        padding: 0.85rem 0.65rem 2rem;
+      }
+
+      .settings-card,
+      .overview-hero-banner,
+      .stat-metric-card {
+        border-radius: 12px;
+      }
+    }
+
     /* Pasokan Masuk Filter Pills & Table */
     .pasokan-filter-pill {
       background: #FFFFFF;

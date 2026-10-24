@@ -148,6 +148,81 @@
     background: #047857;
     box-shadow: 0 0 8px rgba(16, 185, 129, 0.9);
   }
+
+  /* ================= MOBILE RESPONSIVE PRELOADER ================= */
+  @media (max-width: 640px) {
+    #sitePreloader {
+      padding: 1.25rem 1rem;
+    }
+
+    .preloader-card {
+      width: 100%;
+      max-width: 320px;
+      padding: 1.75rem 1.25rem 1.5rem;
+      border-radius: 22px;
+      box-shadow: 
+        0 18px 40px -8px rgba(16, 185, 129, 0.22),
+        0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .preloader-icon-wrap {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1.1rem auto;
+      box-shadow: 
+        0 0 0 6px rgba(16, 185, 129, 0.1),
+        0 0 0 12px rgba(16, 185, 129, 0.04);
+    }
+
+    .preloader-icon-img {
+      width: 34px;
+      height: 34px;
+    }
+
+    .preloader-title {
+      font-size: 1.15rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .preloader-desc {
+      font-size: 0.82rem;
+      line-height: 1.45;
+      margin-bottom: 1.35rem;
+      padding: 0;
+    }
+
+    .preloader-progress-track {
+      height: 4px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .preloader-card {
+      padding: 1.4rem 1rem 1.25rem;
+      border-radius: 18px;
+      max-width: 290px;
+    }
+
+    .preloader-icon-wrap {
+      width: 54px;
+      height: 54px;
+      margin-bottom: 0.85rem;
+    }
+
+    .preloader-icon-img {
+      width: 28px;
+      height: 28px;
+    }
+
+    .preloader-title {
+      font-size: 1.05rem;
+    }
+
+    .preloader-desc {
+      font-size: 0.76rem;
+      margin-bottom: 1.15rem;
+    }
+  }
 </style>
 
 <div id="sitePreloader" role="dialog" aria-modal="true" aria-label="Memuat SisaBerkah">
@@ -171,19 +246,19 @@
     const bar = document.getElementById('preloaderBar');
     if (!preloader || !bar) return;
 
-    let progress = 15;
-    bar.style.width = '15%';
+    let progress = 20;
+    bar.style.width = '20%';
     const startTime = Date.now();
     let isHidden = false;
 
-    // Simulasi progres bertahap yang mulus
+    // Simulasi progres bertahap yang mulus & cepat
     const interval = setInterval(() => {
-      if (progress < 85) {
-        progress += Math.floor(Math.random() * 10) + 8;
-        if (progress > 85) progress = 85;
+      if (progress < 88) {
+        progress += Math.floor(Math.random() * 14) + 10;
+        if (progress > 88) progress = 88;
         bar.style.width = progress + '%';
       }
-    }, 100);
+    }, 70);
 
     function hidePreloader() {
       if (isHidden) return;
@@ -191,15 +266,15 @@
       clearInterval(interval);
       bar.style.width = '100%';
 
-      // Berikan jeda halus agar progress 100% terlihat sejenak
+      // Jeda halus ramah mobile (cepat dan tidak membebani ponsel)
       const elapsed = Date.now() - startTime;
-      const remainingWait = Math.max(220, 750 - elapsed);
+      const remainingWait = Math.max(100, 380 - elapsed);
 
       setTimeout(() => {
         preloader.classList.add('preloader-hidden');
         setTimeout(() => {
           preloader.style.display = 'none';
-        }, 550);
+        }, 400);
       }, remainingWait);
     }
 
@@ -210,7 +285,12 @@
       window.addEventListener('load', hidePreloader);
     }
 
-    // Pengaman maksimal agar preloader tidak pernah macet
-    setTimeout(hidePreloader, 3200);
+    // Touch-to-dismiss darurat: ketuk layar untuk lewati jika koneksi HP melambat
+    preloader.addEventListener('click', function() {
+      hidePreloader();
+    });
+
+    // Pengaman maksimal agar preloader tidak pernah macet di HP
+    setTimeout(hidePreloader, 2200);
   })();
 </script>

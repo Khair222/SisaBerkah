@@ -608,19 +608,72 @@
         flex-direction: column;
       }
       .auth-hero-side {
-        min-height: 400px;
+        min-height: 280px;
         flex: none;
-        padding: 3rem 2rem 2.5rem;
+        padding: 2.25rem 1.75rem 1.75rem;
       }
       .hero-main-title {
-        font-size: 2.2rem;
+        font-size: 2rem;
       }
       .auth-form-side {
-        padding: 4.5rem 1.5rem 3rem;
+        padding: 3.5rem 1.5rem 2.5rem;
       }
       .auth-back-link {
-        top: 1.5rem;
-        left: 1.5rem;
+        top: 1.25rem;
+        left: 1.25rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .auth-hero-side {
+        min-height: 180px;
+        max-height: 210px;
+        padding: 1.5rem 1.25rem 1.15rem;
+      }
+      .hero-tag {
+        font-size: 0.78rem;
+        margin-bottom: 0.3rem;
+      }
+      .hero-main-title {
+        font-size: 1.4rem;
+        margin-bottom: 0.3rem;
+        line-height: 1.2;
+      }
+      .hero-main-desc {
+        display: none;
+      }
+      .hero-features-row {
+        display: none;
+      }
+      .auth-back-link {
+        top: 0.85rem;
+        left: 0.85rem;
+        font-size: 0.8rem;
+        padding: 0.3rem 0.65rem;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 9999px;
+      }
+      .auth-form-side {
+        padding: 2rem 1.15rem 2.5rem;
+      }
+      .auth-form-card {
+        max-width: 100%;
+      }
+      .auth-title {
+        font-size: 1.65rem;
+      }
+      .auth-role-btn {
+        padding: 0.55rem 0.65rem;
+        font-size: 0.84rem;
+      }
+      .auth-input {
+        padding: 0.8rem 0.95rem;
+        font-size: 0.9rem;
+      }
+      .auth-warning-popup {
+        min-width: 280px;
+        max-width: 92vw;
+        padding: 0.75rem 1rem;
       }
     }
   </style>
