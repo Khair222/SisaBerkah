@@ -13,19 +13,19 @@
   <style>
     :root {
       --sidebar-w: 280px;
-      --sidebar-bg: #04140D;
-      --sidebar-border: rgba(255, 255, 255, 0.08);
-      --sidebar-hover: rgba(255, 255, 255, 0.06);
-      --sidebar-active-bg: rgba(34, 197, 94, 0.14);
-      --sidebar-active-text: #22C55E;
-      --sidebar-text: #E2E8F0;
-      --sidebar-muted: #8FA89B;
+      --sidebar-bg: #116246;
+      --sidebar-border: rgba(255, 255, 255, 0.16);
+      --sidebar-hover: rgba(255, 255, 255, 0.14);
+      --sidebar-active-bg: rgba(255, 255, 255, 0.24);
+      --sidebar-active-text: #FFFFFF;
+      --sidebar-text: #E8FAF2;
+      --sidebar-muted: #A7F3D0;
       --dash-bg: #F4F6F4;
       --card-bg: #FFFFFF;
       --border-color: #E2E8E2;
       --primary: #10B981;
       --primary-dark: #047857;
-      --accent-green: #22C55E;
+      --accent-green: #34D399;
     }
 
     * {
@@ -49,13 +49,15 @@
       position: fixed;
       top: 0;
       left: 0;
-      background: var(--sidebar-bg);
+      background: #116246;
+      background: linear-gradient(180deg, #157351 0%, #0E523A 100%);
       border-right: 1px solid var(--sidebar-border);
       display: flex;
       flex-direction: column;
       z-index: 1000;
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       overflow-y: auto;
+      box-shadow: 4px 0 25px rgba(14, 82, 58, 0.15);
     }
 
     .sidebar-brand-box {
@@ -79,26 +81,28 @@
     }
 
     .sidebar-panel-tag {
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      background: rgba(34, 197, 94, 0.15);
-      color: var(--accent-green);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      padding: 0.2rem 0.55rem;
+      letter-spacing: 0.8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 0.3rem 0.85rem;
       border-radius: 9999px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }
 
     .sidebar-mitra-card {
       margin: 1.15rem 1.15rem 0.75rem;
       padding: 0.95rem;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--sidebar-border);
+      background: rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.16);
       border-radius: 14px;
       display: flex;
       align-items: center;
       gap: 0.85rem;
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.08);
     }
 
     .sidebar-avatar-wrap {
@@ -113,7 +117,7 @@
       height: 100%;
       border-radius: 12px;
       object-fit: cover;
-      border: 2px solid rgba(34, 197, 94, 0.4);
+      border: 2px solid #6EE7B7;
     }
 
     .sidebar-online-dot {
@@ -123,7 +127,7 @@
       width: 11px;
       height: 11px;
       background: #22C55E;
-      border: 2px solid var(--sidebar-bg);
+      border: 2px solid #0E523A;
       border-radius: 50%;
     }
 
@@ -145,7 +149,7 @@
 
     .sidebar-mitra-owner {
       font-size: 0.76rem;
-      color: var(--sidebar-muted);
+      color: #D1FAE5;
       margin: 0;
       white-space: nowrap;
       overflow: hidden;
@@ -157,16 +161,17 @@
       padding: 0.85rem 0.85rem;
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
+      gap: 0.35rem;
     }
 
     .sidebar-nav-header {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      color: #64748B;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.9px;
+      color: #A7F3D0;
       text-transform: uppercase;
       padding: 0.85rem 0.65rem 0.35rem;
+      opacity: 0.95;
     }
 
     .sidebar-nav-btn {
@@ -174,9 +179,9 @@
       display: flex;
       align-items: center;
       gap: 0.8rem;
-      padding: 0.72rem 0.95rem;
+      padding: 0.75rem 0.95rem;
       border-radius: 11px;
-      border: none;
+      border: 1px solid transparent;
       background: transparent;
       color: var(--sidebar-text);
       font-family: inherit;
@@ -199,20 +204,23 @@
     .sidebar-nav-btn:hover {
       background: var(--sidebar-hover);
       color: #FFFFFF;
+      border-color: rgba(255, 255, 255, 0.18);
     }
 
     .sidebar-nav-btn:hover i {
-      color: var(--accent-green);
+      color: #FFFFFF;
     }
 
     .sidebar-nav-btn.active {
       background: var(--sidebar-active-bg);
-      color: var(--accent-green);
+      color: #FFFFFF;
       font-weight: 700;
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .sidebar-nav-btn.active i {
-      color: var(--accent-green);
+      color: #FFFFFF;
     }
 
     .sidebar-nav-btn.active::before {
@@ -221,19 +229,21 @@
       left: 0;
       top: 15%;
       bottom: 15%;
-      width: 3.5px;
-      background: var(--accent-green);
+      width: 4px;
+      background: #86EFAC;
       border-radius: 0 4px 4px 0;
+      box-shadow: 0 0 8px rgba(134, 239, 172, 0.9);
     }
 
     .sidebar-badge-count {
       margin-left: auto;
       font-size: 0.72rem;
       font-weight: 700;
-      padding: 0.15rem 0.45rem;
+      padding: 0.18rem 0.5rem;
       border-radius: 9999px;
-      background: rgba(34, 197, 94, 0.2);
-      color: var(--accent-green);
+      background: rgba(255, 255, 255, 0.24);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .sidebar-footer {
@@ -242,14 +252,14 @@
       display: flex;
       flex-direction: column;
       gap: 0.45rem;
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.16);
     }
 
     .sidebar-footer-link {
       display: flex;
       align-items: center;
       gap: 0.65rem;
-      padding: 0.62rem 0.85rem;
+      padding: 0.65rem 0.85rem;
       border-radius: 9px;
       font-size: 0.82rem;
       font-weight: 600;
@@ -258,27 +268,28 @@
     }
 
     .sidebar-footer-link.public {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.14);
       color: #FFFFFF;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.24);
     }
 
     .sidebar-footer-link.public:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(34, 197, 94, 0.4);
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.4);
     }
 
     .sidebar-footer-link.logout {
-      background: transparent;
-      color: #F87171;
-      border: 1px solid transparent;
+      background: rgba(239, 68, 68, 0.2);
+      color: #FEE2E2;
+      border: 1px solid rgba(239, 68, 68, 0.35);
       cursor: pointer;
       width: 100%;
     }
 
     .sidebar-footer-link.logout:hover {
-      background: rgba(239, 68, 68, 0.1);
-      border-color: rgba(239, 68, 68, 0.25);
+      background: #EF4444;
+      color: #FFFFFF;
+      border-color: #DC2626;
     }
 
     /* ================= 2. MAIN CONTENT WRAPPER ================= */
@@ -663,7 +674,8 @@
 
     .mobile-dash-header {
       display: none;
-      background: var(--sidebar-bg);
+      background: #116246;
+      background: linear-gradient(90deg, #157351 0%, #0E523A 100%);
       padding: 0.85rem 1.25rem;
       border-bottom: 1px solid var(--sidebar-border);
       align-items: center;
