@@ -16,6 +16,7 @@ $app = Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'ai-scanner/analyze',
             'api/chatbot/message',
+            'chatbot/message',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

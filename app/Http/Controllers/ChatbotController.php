@@ -54,8 +54,8 @@ PANDUAN PANJANG JAWABAN (SEDANG, PAS & BERBOBOT):
 - Format rapi menggunakan bold untuk kata kunci dan bullet points agar nyaman dibaca di jendela chat.";
 
             if (!empty($apiKey)) {
-                // Coba model gemini-3.5-flash-lite terlebih dahulu untuk kecepatan dan kuota tinggi, lalu fallback ke gemini-2.5-flash
-                $modelsToTry = ['gemini-3.5-flash-lite', 'gemini-2.5-flash'];
+                // Coba model resmi Google Gemini
+                $modelsToTry = ['gemini-2.0-flash', 'gemini-1.5-flash'];
                 foreach ($modelsToTry as $mName) {
                     $reply = $this->callGeminiChat($userMessage, $history, $systemInstruction, $apiKey, $mName);
                     if ($reply) {
