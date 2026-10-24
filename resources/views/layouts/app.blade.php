@@ -63,6 +63,17 @@
       </a>
 
       <div class="navbar-nav" id="navbarNav">
+        <!-- Drawer Header for Mobile -->
+        <div class="nav-drawer-header">
+          <div class="nav-drawer-brand">
+            <img src="{{ asset('assets/images/logo-icon.png') }}" alt="Logo" class="nav-drawer-icon" onerror="this.src='{{ asset('assets/images/logo.png') }}'">
+            <span>Menu SisaBerkah</span>
+          </div>
+          <button type="button" class="nav-drawer-close-btn" onclick="closeMobileNav()" aria-label="Tutup Menu">
+            &times;
+          </button>
+        </div>
+
         <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Beranda</a>
         <a href="{{ route('home') }}#tentang">Tentang</a>
         <a href="{{ route('home') }}#cara-kerja">Cara Kerja</a>
@@ -99,16 +110,16 @@
         </div>
       </div>
 
-      <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu">
+      <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" onclick="toggleMobileNav(event)">
         <span></span>
         <span></span>
         <span></span>
       </button>
     </div>
-  </nav>
 
-  <!-- Mobile overlay -->
-  <div class="mobile-overlay" id="mobileOverlay"></div>
+    <!-- Mobile overlay inside navbar for unified stacking context -->
+    <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileNav()"></div>
+  </nav>
 
   <!-- Content -->
   @yield('content')
@@ -172,30 +183,55 @@
   @include('partials.berkahbot')
 
   <script>
+    // Global mobile nav toggle and close functions
+    window.closeMobileNav = function() {
+      const menuToggle = document.getElementById('menuToggle');
+      const navbarNav = document.getElementById('navbarNav');
+      const mobileOverlay = document.getElementById('mobileOverlay');
+      if (menuToggle) menuToggle.classList.remove('active');
+      if (navbarNav) navbarNav.classList.remove('open');
+      if (mobileOverlay) mobileOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+
+    window.toggleMobileNav = function(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      const menuToggle = document.getElementById('menuToggle');
+      const navbarNav = document.getElementById('navbarNav');
+      const mobileOverlay = document.getElementById('mobileOverlay');
+      if (!menuToggle || !navbarNav) return;
+
+      const isOpen = navbarNav.classList.toggle('open');
+      menuToggle.classList.toggle('active', isOpen);
+      if (mobileOverlay) mobileOverlay.classList.toggle('active', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide && typeof window.lucide.createIcons === 'function') {
         lucide.createIcons();
       }
 
-      const menuToggle = document.getElementById('menuToggle');
+      // Automatically close drawer when clicking on navigation links
       const navbarNav = document.getElementById('navbarNav');
-      const mobileOverlay = document.getElementById('mobileOverlay');
-
-      if (menuToggle && navbarNav) {
-        menuToggle.addEventListener('click', () => {
-          menuToggle.classList.toggle('active');
-          navbarNav.classList.toggle('open');
-          if (mobileOverlay) mobileOverlay.classList.toggle('active');
-        });
-
-        if (mobileOverlay) {
-          mobileOverlay.addEventListener('click', () => {
-            menuToggle.classList.remove('active');
-            navbarNav.classList.remove('open');
-            mobileOverlay.classList.remove('active');
+      if (navbarNav) {
+        const links = navbarNav.querySelectorAll('a, button:not(.nav-drawer-close-btn)');
+        links.forEach(link => {
+          link.addEventListener('click', () => {
+            setTimeout(window.closeMobileNav, 100);
           });
-        }
+        });
       }
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          window.closeMobileNav();
+        }
+      });
     });
   </script>
 
