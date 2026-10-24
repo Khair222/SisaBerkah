@@ -13,8 +13,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jenis-limbah', [HomeController::class, 'jenisLimbah'])->name('jenis-limbah');
 Route::get('/ai-scanner', [AiScannerController::class, 'index'])->name('ai-scanner');
 Route::post('/ai-scanner/analyze', [AiScannerController::class, 'analyze'])->name('ai-scanner.analyze');
-Route::post('/api/chatbot/message', [ChatbotController::class, 'sendMessage'])->name('chatbot.message');
-Route::post('/chatbot/message', [ChatbotController::class, 'sendMessage']);
+Route::post('/chatbot/message', [ChatbotController::class, 'sendMessage'])->name('chatbot.message');
+Route::post('/api/chatbot/message', [ChatbotController::class, 'sendMessage']);
 Route::get('/mitra', [MitraController::class, 'index'])->name('mitra.index');
 Route::get('/mitra-detail/{id}', [MitraController::class, 'detail'])->name('mitra.detail');
 
