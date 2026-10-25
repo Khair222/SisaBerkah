@@ -3,25 +3,17 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\AdminMitra;
 use App\Models\MitraProfile;
+use App\Models\PasokanMasuk;
 
 class MitraSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Ensure User Accounts
-        $doniUser = User::firstOrCreate(
-            ['email' => 'doni@sisaberkah.id'],
-            [
-                'name' => 'Peternakan Pak Doni',
-                'password' => Hash::make('mitra123'),
-                'role' => 'mitra',
-            ]
-        );
-
+        // 1. Akun Pengguna Biasa (User)
         User::firstOrCreate(
             ['email' => 'user@sisaberkah.id'],
             [
@@ -31,11 +23,31 @@ class MitraSeeder extends Seeder
             ]
         );
 
-        // 2. Default 6 Mitra Profiles
+        // 2. Akun Admin Mitra (Pak Doni)
+        $adminDoni = AdminMitra::firstOrCreate(
+            ['email' => 'doni@sisaberkah.id'],
+            [
+                'mitra_id' => 'doni',
+                'name' => 'Peternakan Pak Doni',
+                'password' => Hash::make('mitra123'),
+            ]
+        );
+
+        // 3. Akun Admin Mitra (Khair Bio-Farm)
+        AdminMitra::firstOrCreate(
+            ['email' => 'khair@sisaberkah.id'],
+            [
+                'mitra_id' => 'mitra_khair_88af',
+                'name' => 'Khair Bio-Farm & Maggot BSF',
+                'password' => Hash::make('mitra123'),
+            ]
+        );
+
+        // 4. Data Profil Mitra Lengkap
         $mitras = [
             [
                 'id' => 'doni',
-                'user_id' => $doniUser->id,
+                'user_id' => $adminDoni->id,
                 'name' => 'Peternakan Pak Doni',
                 'owner' => 'Pak Doni Prasetyo',
                 'category' => 'Peternakan',
@@ -44,95 +56,112 @@ class MitraSeeder extends Seeder
                 'whatsapp' => '6283193738711',
                 'image_url' => 'assets/images/partner_doni.jpg',
                 'materials_needed' => 'Ampas tahu segar, ampas kelapa, & sisa sayuran hijau (sawi, kangkung, kubis)',
-                'estimated_amount' => '150 – 500 Kg / minggu',
+                'estimated_amount' => '150 - 500 Kg / minggu',
                 'terms_conditions' => 'Ampas tahu maksimal 24 jam setelah produksi, bebas kantong kresek.',
                 'description' => 'Peternakan kambing etawa dan domba pedesaan dengan kandang panggung modern, mengutamakan pakan berbasis hijauan dan ampas organik.',
                 'operating_hours' => 'Senin - Sabtu, 07:00 - 16:00 WIB',
                 'status' => 'active',
             ],
             [
-                'id' => 'budi',
+                'id' => 'mitra_khair_88af',
                 'user_id' => null,
-                'name' => 'Peternakan Pak Budi',
-                'owner' => 'Pak Budi Santoso',
+                'name' => 'Khair Bio-Farm & Maggot BSF',
+                'owner' => 'Fathul Khair',
                 'category' => 'Peternakan',
-                'location' => 'Cisarua, Bogor',
-                'full_location' => 'Cisarua, Bogor, Jawa Barat',
-                'whatsapp' => '6283193738711',
-                'image_url' => 'assets/images/partner_budi.jpg',
-                'materials_needed' => 'Roti afkir & sisa bahan roti yang tidak berjamur',
-                'estimated_amount' => '100 – 300 Kg / minggu',
-                'terms_conditions' => 'Bebas staples, kantong plastik, dan jamur hitam beracun.',
-                'description' => 'Peternakan sapi perah & potong yang membuka peluang kerja sama dengan pemasok bahan organik terpilah yang sesuai untuk kebutuhan pakan ternaknya.',
-                'operating_hours' => 'Setiap hari, 06:00 - 17:00 WIB',
-                'status' => 'active',
-            ],
-            [
-                'id' => 'adam',
-                'user_id' => null,
-                'name' => 'Peternakan Pak Adam',
-                'owner' => 'Pak Adam Firmansyah',
-                'category' => 'Peternakan',
-                'location' => 'Karangploso, Malang',
-                'full_location' => 'Karangploso, Malang, Jawa Timur',
-                'whatsapp' => '6283193738711',
-                'image_url' => 'assets/images/partner_adam.jpg',
-                'materials_needed' => 'Sisa sayuran segar pasar, buah afkir (pepaya, semangka, pisang), & sisa karbohidrat bersih',
-                'estimated_amount' => '50 – 200 Kg / minggu',
-                'terms_conditions' => 'Belum busuk berlendir parah, tidak tercampur minyak jelantah kotor.',
-                'description' => 'Peternakan ayam kampung dan unggas semi-umbaran ramah lingkungan dengan formulasi pakan alami bernutrisi seimbang.',
-                'operating_hours' => 'Senin - Sabtu, 08:00 - 15:00 WIB',
-                'status' => 'active',
-            ],
-            [
-                'id' => 'haris',
-                'user_id' => null,
-                'name' => 'Peternakan Pak Haris',
-                'owner' => 'Pak Haris Maulana',
-                'category' => 'Peternakan',
-                'location' => 'Cipondoh, Tangerang',
-                'full_location' => 'Cipondoh, Tangerang, Banten',
+                'location' => 'Ngaglik, Sleman',
+                'full_location' => 'Jl. Kaliurang Km 10, Ngaglik, Sleman, D.I. Yogyakarta',
                 'whatsapp' => '6283193738711',
                 'image_url' => 'assets/images/partner_haris.jpg',
-                'materials_needed' => 'Sisa makanan katering, sisa dapur restoran, & sisa potongan sayur hotel',
-                'estimated_amount' => '300 – 800 Kg / minggu',
-                'terms_conditions' => 'Wajib terpisah dari tusuk sate, plastik, dan tulang sapi besar.',
-                'description' => 'Sentra biokonversi Maggot Black Soldier Fly (BSF) perkotaan. Mengolah limbah makanan organik basah menjadi pakan berprotein tinggi.',
-                'operating_hours' => 'Setiap hari, 08:00 - 17:00 WIB',
+                'materials_needed' => 'Sisa makanan basah resto, sisa sayur katering, limbah buah pasar, & sisa nasi',
+                'estimated_amount' => '200 - 500 Kg / minggu',
+                'terms_conditions' => 'Bebas plastik, tusuk sate, dan bahan kimia, maksimal 48 jam.',
+                'description' => 'Peternakan larva Black Soldier Fly (BSF / Maggot) dan unggas ramah lingkungan untuk pengurai sampah organik aktif.',
+                'operating_hours' => 'Senin - Sabtu, 08:00 - 16:00 WIB',
                 'status' => 'active',
             ],
             [
-                'id' => 'andi',
+                'id' => 'mitra_unggas_berkah',
                 'user_id' => null,
-                'name' => 'Pertanian Pak Andi',
-                'owner' => 'Pak Andi Wijaya',
+                'name' => 'Peternakan Unggas Berkah',
+                'owner' => 'H. Bambang Sutrisno',
+                'category' => 'Peternakan',
+                'location' => 'Imogiri, Bantul',
+                'full_location' => 'Jl. Imogiri Timur Km 14, Imogiri, Bantul, D.I. Yogyakarta',
+                'whatsapp' => '6281234567801',
+                'image_url' => 'assets/images/waste_market.jpg',
+                'materials_needed' => 'Ampas jagung, dedak halus, sisa sayuran sawi & kubis pasar terpilah',
+                'estimated_amount' => '300 - 700 Kg / minggu',
+                'terms_conditions' => 'Bahan segar, tidak berbau busuk tajam, bebas paku atau kawat.',
+                'description' => 'Peternakan ayam petelur dan itik modern ramah lingkungan dengan pemanfaatan pakan tambahan organik.',
+                'operating_hours' => 'Senin - Sabtu, 07:00 - 16:30 WIB',
+                'status' => 'active',
+            ],
+            [
+                'id' => 'mitra_haris_sayur',
+                'user_id' => null,
+                'name' => 'Kebun Sayur Organik Pak Budi',
+                'owner' => 'Budi Santoso',
                 'category' => 'Pertanian',
-                'location' => 'Cisaat, Sukabumi',
-                'full_location' => 'Cisaat, Sukabumi, Jawa Barat',
-                'whatsapp' => '6283193738711',
-                'image_url' => 'assets/images/about_organic.jpg',
-                'materials_needed' => 'Daun gugur kering, serasah kebun, kulit buah manis, & pangkasan tanaman',
-                'estimated_amount' => '200 – 600 Kg / minggu',
-                'terms_conditions' => 'Bebas dari pestisida kimia sintetis, bersih dalam karung goni.',
-                'description' => 'Lahan perkebunan hortikultura organik dan tanaman buah tropis. Menggunakan sistem pertanian regeneratif dan pembuatan pupuk organik cair (POC).',
-                'operating_hours' => 'Senin - Jumat, 07:00 - 15:00 WIB',
+                'location' => 'Cangkringan, Sleman',
+                'full_location' => 'Jl. Merapi Golf Km 3, Cangkringan, Sleman, D.I. Yogyakarta',
+                'whatsapp' => '6281234567802',
+                'image_url' => 'assets/images/partner_budi.jpg',
+                'materials_needed' => 'Daun-daunan hijau pangkasan, limbah sisa sayur pasar, ampas kelapa',
+                'estimated_amount' => '400 - 800 Kg / minggu',
+                'terms_conditions' => 'Bebas plastik dan residu pestisida kimia sintetis.',
+                'description' => 'Perkebunan holtikultura dan sayuran organik lereng Gunung Merapi bersertifikat ramah lingkungan.',
+                'operating_hours' => 'Senin - Sabtu, 06:30 - 15:00 WIB',
                 'status' => 'active',
             ],
             [
-                'id' => 'dedi',
+                'id' => 'mitra_hidroponik_green',
                 'user_id' => null,
-                'name' => 'Pengolahan Kompos Pak Dedi',
-                'owner' => 'Pak Dedi Kusuma',
+                'name' => 'Green Agrotech Nusantara',
+                'owner' => 'Ir. Siti Rahmawati',
+                'category' => 'Pertanian',
+                'location' => 'Berbah, Sleman',
+                'full_location' => 'Kawasan Agroeduwisata Berbah, Sleman, D.I. Yogyakarta',
+                'whatsapp' => '6281234567803',
+                'image_url' => 'assets/images/waste_vegetables.jpg',
+                'materials_needed' => 'Sisa kulit buah (jeruk, nanas, pepaya) untuk mikroba ekoenzim & POC',
+                'estimated_amount' => '150 - 350 Kg / minggu',
+                'terms_conditions' => 'Buah belum berjamur hitam tebal, kondisi bersih dari sabun atau deterjen.',
+                'description' => 'Pusat budidaya tanaman pangan dan buah hortikultura berbasis pupuk fermentasi organik cair.',
+                'operating_hours' => 'Senin - Jumat, 08:00 - 16:00 WIB',
+                'status' => 'active',
+            ],
+            [
+                'id' => 'mitra_rumah_kompos_adam',
+                'user_id' => null,
+                'name' => 'Rumah Kompos Adam Sejahtera',
+                'owner' => 'Adam Pramono',
                 'category' => 'Pengolahan Kompos',
-                'location' => 'Lembang, Bandung',
-                'full_location' => 'Lembang, Bandung, Jawa Barat',
-                'whatsapp' => '6283193738711',
+                'location' => 'Kasihan, Bantul',
+                'full_location' => 'Jl. Bibis Raya, Kasihan, Bantul, D.I. Yogyakarta',
+                'whatsapp' => '6281234567805',
+                'image_url' => 'assets/images/partner_adam.jpg',
+                'materials_needed' => 'Limbah sayuran basah dapur resto, sisa nasi basi, & serbuk gergaji kayu',
+                'estimated_amount' => '1 - 3 Ton / minggu',
+                'terms_conditions' => 'Terpilah rapi, dapat dijemput dengan armada pick-up jika volume > 200 kg.',
+                'description' => 'Unit pengolahan kompos terpadu yang memproduksi pupuk organik granular dan nutrisi tanah siap pakai.',
+                'operating_hours' => 'Senin - Sabtu, 08:00 - 17:00 WIB',
+                'status' => 'active',
+            ],
+            [
+                'id' => 'mitra_kompos_lestari_jogja',
+                'user_id' => null,
+                'name' => 'Sentra Kompos Hijau Mandiri',
+                'owner' => 'Dra. Endang Kusuma',
+                'category' => 'Pengolahan Kompos',
+                'location' => 'Umbulharjo, Kota Yogyakarta',
+                'full_location' => 'Kawasan Pengelolaan Sampah Mandiri, Umbulharjo, Kota Yogyakarta',
+                'whatsapp' => '6281234567806',
                 'image_url' => 'assets/images/hero_compost.jpg',
-                'materials_needed' => 'Ampas kopi espresso/tubruk, sisa teh celup lepas, & sisa sayuran pasar',
-                'estimated_amount' => '500 – 1.200 Kg / minggu',
-                'terms_conditions' => 'Bebas puntung rokok, kantong teh sintetis, dan staples.',
-                'description' => 'Pusat produksi kompos organik granular dan vermikompos untuk penghijauan kota. Menerima bahan kaya nitrogen dan karbon dari berbagai usaha.',
-                'operating_hours' => 'Setiap hari, 07:00 - 16:30 WIB',
+                'materials_needed' => 'Ampas bubuk kopi kafe, kulit telur ayam, limbah sisa makanan hotel',
+                'estimated_amount' => '500 - 1.500 Kg / minggu',
+                'terms_conditions' => 'Dipisahkan antara sisa basah dan sisa kering, bebas kemasan sachet.',
+                'description' => 'Fasilitas pengolahan kompos perkotaan yang bermitra dengan hotel, restoran, dan kafe di Yogyakarta.',
+                'operating_hours' => 'Senin - Sabtu, 08:00 - 16:00 WIB',
                 'status' => 'active',
             ],
         ];
@@ -140,5 +169,28 @@ class MitraSeeder extends Seeder
         foreach ($mitras as $m) {
             MitraProfile::updateOrCreate(['id' => $m['id']], $m);
         }
+
+        // 5. Sample Pasokan Masuk untuk Doni
+        PasokanMasuk::firstOrCreate(
+            ['mitra_id' => 'doni', 'tanggal' => '2026-10-23', 'nama_penyalur' => 'Pabrik Tahu Sumber Rejeki (Pak RT)'],
+            [
+                'kontak_wa' => '6281234567890',
+                'jenis_bahan' => 'Ampas tahu putih segar (hangat)',
+                'volume' => '250 Kg',
+                'status' => 'Rutin Mingguan',
+                'catatan' => 'Kualitas bagus, minim kadar air.',
+            ]
+        );
+
+        PasokanMasuk::firstOrCreate(
+            ['mitra_id' => 'doni', 'tanggal' => '2026-10-22', 'nama_penyalur' => 'Rumah Makan Padang Saiyo'],
+            [
+                'kontak_wa' => '6289876543210',
+                'jenis_bahan' => 'Sisa sayuran kubis & ampas kelapa',
+                'volume' => '120 Kg',
+                'status' => 'Jadwal Penjemputan',
+                'catatan' => 'Jadwal jemput tiap jam 16.00 WIB.',
+            ]
+        );
     }
 }

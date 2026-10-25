@@ -113,13 +113,13 @@ php artisan key:generate
 
 ### Langkah 6: Konfigurasi Database
 
-#### Opsi A: Menggunakan MySQL (Disarankan - Sesuai Pengaturan XAMPP)
-1. Nyalakan service **Apache** dan **MySQL** pada kontrol panel **XAMPP** atau **Laragon**.
-2. Buat database baru bernama `sisaberkah_db` melalui **phpMyAdmin** (`http://localhost/phpmyadmin`) atau terminal MySQL:
+#### Opsi A: Menggunakan MySQL (Disarankan - Sesuai Pengaturan XAMPP / Laragon)
+1. Nyalakan service **MySQL** pada kontrol panel **XAMPP** atau **Laragon**.
+2. Buat database baru bernama `sisaberkah_db` melalui **phpMyAdmin** (`http://localhost/phpmyadmin`) atau terminal:
    ```sql
    CREATE DATABASE sisaberkah_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
    ```
-3. Sesuaikan parameter koneksi database pada berkas `.env`:
+3. Pastikan parameter database pada berkas `.env` sudah sesuai (secara default `.env.example` sudah disesuaikan):
    ```env
    DB_CONNECTION=mysql
    DB_HOST=127.0.0.1
@@ -128,26 +128,34 @@ php artisan key:generate
    DB_USERNAME=root
    DB_PASSWORD=
    ```
-4. **Import Skema & Data Awal:**
-   Impor berkas `database/database.sql` ke database `sisaberkah_db`. Anda dapat mengimpornya langsung melalui menu **Import** di phpMyAdmin, atau via baris perintah:
-   ```bash
-   mysql -u root -p sisaberkah_db < database/database.sql
-   ```
+4. **Siapkan Tabel & Data Awal (Pilih salah satu cara berikut):**
+   - **Cara 1 (Import SQL - Sangat Mudah via phpMyAdmin):**
+     Buka phpMyAdmin > klik database `sisaberkah_db` > pilih tab **Import** > pilih berkas `database/database.sql` > klik **Import**.
+     *(Atau via terminal: `mysql -u root -p sisaberkah_db < database/database.sql`)*
+   - **Cara 2 (Via Artisan Migration & Seeder):**
+     ```bash
+     php artisan migrate --seed
+     ```
 
-#### Opsi B: Menggunakan SQLite (Opsi Cepat Tanpa Menyalakan MySQL)
-Jika ingin menggunakan SQLite:
-1. Pastikan file database SQLite tersedia:
-   ```powershell
-   if (!(Test-Path database/database.sqlite)) { New-Item -ItemType File database/database.sqlite }
-   ```
-2. Ubah konfigurasi di `.env`:
+#### Opsi B: Menggunakan SQLite (Opsi Cepat Tanpa MySQL)
+Jika ingin menggunakan basis data lokal tanpa XAMPP:
+1. Buat berkas database SQLite:
+   - **Windows PowerShell:**
+     ```powershell
+     if (!(Test-Path database/database.sqlite)) { New-Item -ItemType File database/database.sqlite }
+     ```
+   - **Linux / macOS / Git Bash:**
+     ```bash
+     touch database/database.sqlite
+     ```
+2. Ubah baris database di `.env`:
    ```env
    DB_CONNECTION=sqlite
-   # Beri tanda komentar (#) pada baris DB_HOST, DB_PORT, DB_DATABASE, dsb.
+   # Berikan tanda komentar (#) pada DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD
    ```
-3. Jalankan migrasi:
+3. Jalankan migrasi dan isi data awal:
    ```bash
-   php artisan migrate
+   php artisan migrate --seed
    ```
 
 ### Langkah 7: Konfigurasi Google Gemini API (Fitur AI)
