@@ -126,7 +126,7 @@ PANDUAN PANJANG JAWABAN (SEDANG, PAS & BERBOBOT):
             'contents' => $contents,
             'generationConfig' => [
                 'temperature' => 0.4,
-                'maxOutputTokens' => 1500
+                'maxOutputTokens' => 3000
             ]
         ];
 
