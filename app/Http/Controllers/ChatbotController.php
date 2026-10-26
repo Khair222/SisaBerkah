@@ -22,7 +22,7 @@ class ChatbotController extends Controller
 
         try {
             $apiKey = config('services.gemini.key');
-            $model = config('services.gemini.model', 'gemini-2.5-flash');
+            $model = config('services.gemini.model', 'gemini-3.5-flash');
 
             // 1. Ambil data mitra aktif untuk context AI
             $activeMitras = MitraProfile::where('status', 'active')
@@ -54,8 +54,14 @@ PANDUAN PANJANG JAWABAN (SEDANG, PAS & BERBOBOT):
 - Format rapi menggunakan bold untuk kata kunci dan bullet points agar nyaman dibaca di jendela chat.";
 
             if (!empty($apiKey)) {
-                // Coba model resmi Google Gemini
-                $modelsToTry = ['gemini-2.0-flash', 'gemini-1.5-flash'];
+                // Coba model resmi Google Gemini yang aktif
+                $modelsToTry = array_values(array_unique([
+                    $model,
+                    'gemini-3.5-flash',
+                    'gemini-3.5-flash-lite',
+                    'gemini-3.8-flash',
+                    'gemini-2.5-flash'
+                ]));
                 foreach ($modelsToTry as $mName) {
                     $reply = $this->callGeminiChat($userMessage, $history, $systemInstruction, $apiKey, $mName);
                     if ($reply) {
@@ -120,7 +126,7 @@ PANDUAN PANJANG JAWABAN (SEDANG, PAS & BERBOBOT):
             'contents' => $contents,
             'generationConfig' => [
                 'temperature' => 0.4,
-                'maxOutputTokens' => 800
+                'maxOutputTokens' => 1500
             ]
         ];
 

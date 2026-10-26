@@ -126,8 +126,8 @@ class AiScannerController extends Controller
     {
         try {
             $base64Image = base64_encode($binaryData);
-            $model = config('services.gemini.model', 'gemini-2.5-flash');
-            $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key=" . $apiKey;
+            $model = config('services.gemini.model', 'gemini-3.5-flash');
+            $modelsToTry = array_values(array_unique([$model, 'gemini-3.5-flash', 'gemini-3.8-flash', 'gemini-2.5-flash']));
 
             $prompt = 'Kamu adalah sistem pakar AI Computer Vision untuk platform SisaBerkah. Tugasmu adalah menganalisis foto apapun yang diunggah pengguna.
 PENTING: Foto bisa berupa:
@@ -214,34 +214,38 @@ Kembalikan analisis dalam format JSON valid dengan struktur:
                 ],
                 'generationConfig' => [
                     'temperature' => 0.2,
+                    'maxOutputTokens' => 1500,
                     'response_mime_type' => 'application/json'
                 ]
             ];
 
-            $ch = curl_init($apiUrl);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
+            foreach ($modelsToTry as $mName) {
+                $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/{$mName}:generateContent?key=" . $apiKey;
+                $ch = curl_init($apiUrl);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                $response = curl_exec($ch);
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
 
-            if ($httpCode === 200 && $response) {
-                $decoded = json_decode($response, true);
-                $content = $decoded['candidates'][0]['content']['parts'][0]['text'] ?? null;
-                if ($content) {
-                    // Bersihkan jika ada format ```json ... ```
-                    $content = preg_replace('/^```(?:json)?\s*/i', '', trim($content));
-                    $content = preg_replace('/\s*```$/', '', $content);
-                    $jsonResult = json_decode($content, true);
-                    if ($jsonResult) {
-                        $jsonResult['image_url'] = $imageUrl;
-                        $jsonResult['powered_by'] = 'Google Gemini 2.5 Flash Vision AI';
-                        return $jsonResult;
+                if ($httpCode === 200 && $response) {
+                    $decoded = json_decode($response, true);
+                    $content = $decoded['candidates'][0]['content']['parts'][0]['text'] ?? null;
+                    if ($content) {
+                        // Bersihkan jika ada format ```json ... ```
+                        $content = preg_replace('/^```(?:json)?\s*/i', '', trim($content));
+                        $content = preg_replace('/\s*```$/', '', $content);
+                        $jsonResult = json_decode($content, true);
+                        if ($jsonResult) {
+                            $jsonResult['image_url'] = $imageUrl;
+                            $jsonResult['powered_by'] = 'Google Gemini 3.5 Flash Vision AI';
+                            return $jsonResult;
+                        }
                     }
                 }
             }
