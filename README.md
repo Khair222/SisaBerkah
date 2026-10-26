@@ -27,7 +27,7 @@ Alih-alih berakhir di Tempat Pembuangan Akhir (TPA) yang memicu emisi gas metana
      - Rekomendasi peruntukan optimal (Pakan Kambing/Sapi, Unggas, Maggot BSF, atau Kompos Ekoenzim)
      - Rekomendasi otomatis mitra penampung terdekat yang membutuhkan bahan tersebut
 2. **🤖 BerkahBot (AI Assistant Konsultasi Organik)**
-   - Asisten virtual pintar interaktif berbasis **Gemini 2.5 Flash / 2.0 Flash**.
+   - Asisten virtual pintar interaktif berbasis **Gemini 3.5 Flash / 3.8 Flash**.
    - Siap menjawab konsultasi cara pemilahan limbah, pembuatan kompos ramah lingkungan, budidaya larva maggot BSF, formula pupuk cair organik (POC/Eco-enzyme), hingga mencarikan kontak WhatsApp mitra terdekat.
 3. **🤝 Direktori & Profil Kemitraan Terverifikasi**
    - Katalog lengkap mitra peternak dan sentra daur ulang organik di wilayah D.I. Yogyakarta dan sekitarnya.
@@ -51,7 +51,7 @@ Alih-alih berakhir di Tempat Pembuangan Akhir (TPA) yang memicu emisi gas metana
 | **Arsitektur Auth** | Multi-Guard Authentication (`web` & `mitra` guards) |
 | **Frontend UI** | Blade Templating Engine, Tailwind CSS v4, Custom Design System (`public/style.css`) |
 | **Ikon & Tipografi** | Lucide Icons, Plus Jakarta Sans / Instrument Sans |
-| **AI / Machine Learning** | Google Gemini API (`gemini-2.5-flash`, `gemini-2.0-flash`, `gemini-1.5-flash`) |
+| **AI / Machine Learning** | Google Gemini API (`gemini-3.5-flash`, `gemini-3.8-flash`, `gemini-2.5-flash`) |
 | **Database** | MySQL / MariaDB (Didukung juga SQLite & PostgreSQL) |
 | **Asset Bundler** | [Vite 6 / 8](https://vitejs.dev) dengan `@tailwindcss/vite` |
 | **HTTP & Interaktivitas** | Vanilla JS, Fetch API (AJAX JSON), WebRTC MediaDevices API (Camera Scanner) |
@@ -162,7 +162,7 @@ Jika ingin menggunakan basis data lokal tanpa XAMPP:
 Untuk mengaktifkan kemampuan pemindaian limbah (**AI Scanner**) dan asisten virtual (**BerkahBot**), tambahkan API Key Google AI Studio Anda ke berkas `.env`:
 ```env
 GEMINI_API_KEY=masukkan_api_key_gemini_anda_disini
-GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MODEL=gemini-3.5-flash
 ```
 > 💡 *Catatan: Anda dapat memperoleh API Key gratis secara langsung di [Google AI Studio](https://aistudio.google.com/). Apabila API Key belum diisi atau kuota habis, AI Scanner tetap memiliki sistem heuristik fallback cerdas.*
 
