@@ -126,15 +126,20 @@ class AiScannerController extends Controller
     {
         try {
             $base64Image = base64_encode($binaryData);
-            $model = config('services.gemini.model', 'gemini-3.5-flash');
-            $modelsToTry = array_values(array_unique([$model, 'gemini-3.5-flash', 'gemini-3.8-flash', 'gemini-2.5-flash']));
 
-            $prompt = 'Kamu adalah sistem pakar AI Computer Vision untuk platform SisaBerkah. Tugasmu adalah menganalisis foto apapun yang diunggah pengguna.
-PENTING: Foto bisa berupa:
+            // Model-model yang TERKONFIRMASI bekerja (hasil test live 28-Oct-2026)
+            $configModel = config('services.gemini.model', 'gemini-3.6-flash');
+            $fallbackModels = ['gemini-3.6-flash', 'gemini-3-flash-preview', 'gemini-3.8-flash', 'gemini-3.5-flash', 'gemini-3.7-flash', 'gemini-flash-latest'];
+            $modelsToTry = array_values(array_unique(array_merge([$configModel], $fallbackModels)));
+
+            $prompt = 'Kamu adalah sistem pakar AI Computer Vision untuk platform SisaBerkah. Tugasmu adalah menganalisis foto apapun yang diunggah pengguna dan memberikan analisis yang AKURAT dan SPESIFIK terhadap ISI FOTO tersebut.
+PENTING: Analisis foto ini secara nyata dan cermat. Foto bisa berupa:
 1. SAMPAH ORGANIK (sisa makanan, sayur, buah, daging, nasi, daun, ampas, batok, dsb).
 2. SAMPAH ANORGANIK (botol plastik, kantong kresek, kaleng, styrofoam, kaca, kertas, kardus, baterai/elektronik).
 3. CAMPURAN (sisa makanan yang tercampur plastik/sendok).
 4. BUKAN SAMPAH (wajah manusia, hewan, mobil, pemandangan, dll).
+
+BERIKAN ANALISIS YANG BERBEDA DAN SPESIFIK BERDASARKAN ISI FOTO. Jangan memberikan jawaban generik yang sama untuk setiap foto.
 
 Kembalikan analisis dalam format JSON valid dengan struktur:
 {
@@ -150,24 +155,24 @@ Kembalikan analisis dalam format JSON valid dengan struktur:
     "parameters": {
         "moisture": "Tinggi / Sedang / Rendah / Kering",
         "freshness": "Kondisi fisik objek (misal: Segar / Layu / Padat / Bersih)",
-        "feasibility_score": 95 (jika anorganik/bukan_sampah beri angka 0-10),
+        "feasibility_score": 95,
         "odor_potential": "Sangat Rendah / Rendah / Sedang / Tinggi"
     },
     "suitability": {
         "maggot": {
-            "suitable": true/false,
+            "suitable": true,
             "score": 90,
             "badge": "Sangat Cocok / Tidak Cocok / Berbahaya",
             "reason": "Alasan kecocokan atau bahayanya jika bahan ini diberikan ke larva maggot"
         },
         "kompos": {
-            "suitable": true/false,
+            "suitable": true,
             "score": 95,
             "badge": "Prioritas Terbaik / Tidak Cocok",
             "reason": "Alasan kecocokan atau ketidakcocokan untuk pembuatan kompos organik"
         },
         "ternak": {
-            "suitable": true/false,
+            "suitable": true,
             "score": 80,
             "badge": "Bisa Langsung / Tidak Cocok / Berbahaya",
             "reason": "Alasan kecocokan pakan ternak (jika plastik/anorganik: sangat berbahaya bagi pencernaan hewan)"
@@ -178,17 +183,17 @@ Kembalikan analisis dalam format JSON valid dengan struktur:
         "steps": [
             "Langkah 1 cara pemilahan praktis",
             "Langkah 2 cara pembersihan/penanganan",
-            "Langkah 3 tujuan penyaluran yang tepat (jika anorganik: ke Bank Sampah/Pengepul Plastik, bukan mitra organik)"
+            "Langkah 3 tujuan penyaluran yang tepat"
         ],
         "upcycle_craft": {
-            "can_upcycle": true/false,
+            "can_upcycle": true,
             "title": "Potensi Kerajinan / Olahan Daur Ulang",
-            "description": "Penjelasan potensi upcycle (jika plastik/kaleng: ecobrick, pot hias, kerajinan; jika organik: kompos/eco-enzyme)"
+            "description": "Penjelasan potensi upcycle"
         },
         "burn_warning": {
             "allowed": false,
             "title": "⚠️ Apakah Boleh Dibakar? DILARANG KERAS!",
-            "reason": "Penjelasan ilmiah bahaya pembakaran (jika anorganik: melepas racun karsinogenik dioksin pemicu kanker; jika organik: asap pekat & emisi metana)"
+            "reason": "Penjelasan ilmiah bahaya pembakaran"
         },
         "storage_tips": "Tips penyimpanan yang aman dan higienis"
     },
@@ -198,6 +203,14 @@ Kembalikan analisis dalam format JSON valid dengan struktur:
     }
 }';
 
+            // Deteksi mime type dari binary data
+            $mimeType = 'image/jpeg';
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
+            $detectedMime = $finfo->buffer($binaryData);
+            if ($detectedMime && in_array($detectedMime, ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/heic', 'image/heif'])) {
+                $mimeType = $detectedMime;
+            }
+
             $payload = [
                 'contents' => [
                     [
@@ -205,7 +218,7 @@ Kembalikan analisis dalam format JSON valid dengan struktur:
                             ['text' => $prompt],
                             [
                                 'inline_data' => [
-                                    'mime_type' => 'image/jpeg',
+                                    'mime_type' => $mimeType,
                                     'data' => $base64Image
                                 ]
                             ]
@@ -213,12 +226,13 @@ Kembalikan analisis dalam format JSON valid dengan struktur:
                     ]
                 ],
                 'generationConfig' => [
-                    'temperature' => 0.2,
-                    'maxOutputTokens' => 1500,
+                    'temperature' => 0.4,
+                    'maxOutputTokens' => 2048,
                     'response_mime_type' => 'application/json'
                 ]
             ];
 
+            $lastError = null;
             foreach ($modelsToTry as $mName) {
                 $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/{$mName}:generateContent?key=" . $apiKey;
                 $ch = curl_init($apiUrl);
@@ -226,31 +240,62 @@ Kembalikan analisis dalam format JSON valid dengan struktur:
                 curl_setopt($ch, CURLOPT_POST, true);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 45);
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
                 $response = curl_exec($ch);
                 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                $curlError = curl_error($ch);
                 curl_close($ch);
+
+                if ($curlError) {
+                    $lastError = "cURL error for {$mName}: {$curlError}";
+                    \Log::warning("[AiScanner] {$lastError}");
+                    continue;
+                }
 
                 if ($httpCode === 200 && $response) {
                     $decoded = json_decode($response, true);
                     $content = $decoded['candidates'][0]['content']['parts'][0]['text'] ?? null;
                     if ($content) {
                         // Bersihkan jika ada format ```json ... ```
-                        $content = preg_replace('/^```(?:json)?\s*/i', '', trim($content));
-                        $content = preg_replace('/\s*```$/', '', $content);
-                        $jsonResult = json_decode($content, true);
+                        $cleaned = preg_replace('/^```(?:json)?\s*/i', '', trim($content));
+                        $cleaned = preg_replace('/\s*```$/', '', $cleaned);
+                        $jsonResult = json_decode($cleaned, true);
                         if ($jsonResult) {
                             $jsonResult['image_url'] = $imageUrl;
-                            $jsonResult['powered_by'] = 'Google Gemini 3.5 Flash Vision AI';
+                            $jsonResult['powered_by'] = "Google Gemini Vision AI ({$mName})";
+                            \Log::info("[AiScanner] Berhasil analisis dengan model: {$mName}");
                             return $jsonResult;
                         }
+                        // Coba parse JSON dari dalam teks jika ada
+                        if (preg_match('/\{[\s\S]+\}/m', $cleaned, $matches)) {
+                            $jsonResult = json_decode($matches[0], true);
+                            if ($jsonResult) {
+                                $jsonResult['image_url'] = $imageUrl;
+                                $jsonResult['powered_by'] = "Google Gemini Vision AI ({$mName})";
+                                return $jsonResult;
+                            }
+                        }
+                        $lastError = "JSON parse gagal untuk model {$mName}. Response: " . substr($content, 0, 200);
+                        \Log::warning("[AiScanner] {$lastError}");
+                    } else {
+                        // Cek apakah ada pesan error dari Gemini
+                        $errorMsg = $decoded['error']['message'] ?? 'unknown';
+                        $lastError = "Gemini {$mName} tidak ada konten. Error: {$errorMsg}";
+                        \Log::warning("[AiScanner] {$lastError}");
                     }
+                } else {
+                    $decoded = json_decode($response, true);
+                    $errorMsg = $decoded['error']['message'] ?? $response;
+                    $lastError = "HTTP {$httpCode} untuk model {$mName}: " . substr($errorMsg, 0, 300);
+                    \Log::warning("[AiScanner] {$lastError}");
                 }
             }
+
+            \Log::error("[AiScanner] Semua model Gemini gagal. Error terakhir: {$lastError}");
         } catch (\Exception $e) {
-            // Silently proceed to heuristic engine
+            \Log::error('[AiScanner] Exception: ' . $e->getMessage() . ' | Trace: ' . $e->getTraceAsString());
         }
 
         return null;
